@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="紗線需求計算器：客戶訂單 PDF 丟進來，對上品項與色號主檔，算出每支經紗、緯紗要多少公斤，匯出 Excel。紗的數量只聽品項主檔，不自己補。"><title>紗線需求計算器｜Tools — Keri Janschitz 作品集</title><link rel="stylesheet" href="site.css"><link rel="stylesheet" href="theme-midnight.css"></head>
+<body class="cs-page">
+<a class="skip" href="#main">跳到主要內容</a>
+<header class="site-header"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><nav class="site-nav" aria-label="網站導覽"><a href="index.html#case-studies">Case Studies</a><a href="index.html#tools" aria-current="page">Tools</a><a href="index.html#playground">Playground</a><a href="index.html#about">About</a><a class="lang-switch" href="case-yarn-en.html" lang="en" hreflang="en" title="English version">EN</a><a class="btn small primary" href="work/yarn-calculator/index.html?demo=1" target="_blank" rel="noopener">開啟工具 ↗</a></nav></div></header>
+<main id="main">
+<section class="cs-hero" id="top"><div class="wrap"><nav class="crumbs" aria-label="路徑"><a href="index.html">作品集首頁</a><span>/</span><a href="index.html#tools">Tools</a><span>/</span><span>紡織業 · 生產備料</span></nav><h1>紗線需求計算器｜訂單 PDF 丟進來，算出每支紗要幾公斤</h1><p class="cs-intro">為一家奧地利紡織公司的生產備料做的單檔離線工具：把客戶的季節訂單 PDF 和兩份 Excel 主檔一起丟進去，自動辨識檔案種類、對上每個位置的品項與色號，算出件數與各支經紗、緯紗的公斤數，彙總成採購用的紗線清單並匯出四張工作表的 Excel。核心原則只有一條：紗的數量只聽品項主檔，缺的值絕不自己補。</p><div class="actions"><a class="btn primary" href="work/yarn-calculator/index.html?demo=1" target="_blank" rel="noopener">開啟工具並載入示範訂單 ↗</a><a class="btn" href="work/yarn-calculator/Demo-Bestellung.pdf" download>下載示範訂單 PDF</a></div></div><div class="wrap"><ul class="cs-meta"><li>內部工具 · 實際備料使用</li><li>需求定義 · AI 輔助實作</li><li>2026 · 德文介面 · 中文說明</li><li>單一 HTML · 離線 · PDF 與 Excel 全在瀏覽器處理</li></ul></div><div class="wrap cs-hero-shots cs-hero-one"><figure><img src="assets/work-yarn.png" alt="紗線需求計算器：上方印章顯示 7 個位置與合計核對，下方 Positionen 表列出每個位置的品項、色號、件數與四支紗的公斤"><figcaption>載入示範訂單後：印章總檢、依品項分組的位置表、四支紗的公斤；缺主檔的位置整列標色</figcaption></figure></div></section>
+
+<div class="wrap cs-layout">
+<aside class="cs-toc" aria-label="章節目錄"><ol><li><a href="#c1"><span>01</span>背景</a></li><li><a href="#c2"><span>02</span>問題</a></li><li><a href="#c3"><span>03</span>設計決策</a></li><li><a href="#c4"><span>04</span>怎麼運作</a></li><li><a href="#c5"><span>05</span>限制與誠實說明</a></li></ol><a class="cs-toc-back" href="index.html#tools">← 返回 Tools</a></aside>
+<div class="cs-body">
+
+<section class="cs-chapter" id="c1"><h2 class="cs-chapter-title"><span>01</span>背景</h2>
+<article class="cs-card"><span class="cs-label">現場</span><h3>一份季節訂單幾十個位置，每個位置背後是兩到四支紗</h3><p>客戶的訂購單是 PDF：每個位置寫品項、顏色（Dessin）、公尺數。備料人員要把每個位置換算成織造件數，再乘上該品項每件的經紗、緯紗克重，才知道每支紗要買多少公斤。品項的係數在一份 Excel 主檔，每個 Dessin 對應的紗號在另一份。原本是人工逐列查表、在 Excel 裡手算。</p></article>
+<article class="cs-card"><span class="cs-label">起點</span><h3>和布樣標註、洗標組合器一樣：用需求把工具說出來</h3><p>我不寫程式，但我知道備料人員手上有哪三個檔、每一步要查什麼、哪裡最常算錯。先把這些說清楚，再讓 AI 實作，用真實訂單一次次試，哪裡對不上就修。這個工具後來真的用在一季的備料上。</p></article>
+</section>
+
+<section class="cs-chapter" id="c2"><h2 class="cs-chapter-title"><span>02</span>問題</h2>
+<article class="cs-card"><span class="cs-label">問題陳述</span><h3>最貴的錯誤不是算錯公斤，而是多算或漏算一支紗</h3><p>色號主檔常把第二支經紗的欄位填成和第一支一樣，如果據此生出一支紗，用量直接變兩倍；反過來，品項主檔有第二支緯紗的係數而色號主檔沒填，漏算就少買一半。所以工具的第一條原則是：有幾支紗由品項主檔的材料列決定，色號主檔只提供紗號，缺的值永遠不補。這句話寫在程式、頁尾、中文說明三個地方。</p></article>
+<article class="cs-card"><span class="cs-label">範圍</span><h3>做什麼、刻意不做什麼</h3><div class="cs-moscow"><div><h4>做</h4><ul><li>自動辨識丟進來的是訂單 PDF、品項主檔還是色號主檔</li><li>主檔合併不覆蓋；檔案與內嵌值衝突時列出差異</li><li>每個位置：件數、兩支經紗、兩支緯紗的公斤</li><li>各紗號的經紗／緯紗總公斤與對應位置清單</li><li>印章式總檢：合計公尺是否等於 PDF 的總量、幾個位置缺主檔</li><li>Excel 匯出四張工作表，含用了哪些係數</li></ul></div><div><h4>刻意不做</h4><ul><li>猜任何缺的係數或紗號</li><li>跨品項借用同號碼的 Dessin</li><li>其他客戶的訂單版型</li><li>庫存扣減、採購單產生、版本紀錄</li></ul></div></div></article>
+</section>
+
+<section class="cs-chapter" id="c3"><h2 class="cs-chapter-title"><span>03</span>設計決策</h2>
+<article class="cs-card"><span class="cs-label">決策 · 核心</span><h3>紗的數量只聽品項主檔</h3><p>品項主檔有填克重的材料列（Kettmaterial A／B、Schussmat. H／J）才會產生一支紗；色號主檔的 B 或 J 空白時沿用 A 或 H 的紗號。如果色號主檔有 B 的紗號但品項主檔沒有 B 列，不算進去，但在 Kontrolle 列出來請人確認。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 不猜</span><h3>同一個 Dessin 號碼在別的品項有，也不拿來用</h3><p>Dessin 號碼在不同品項可能對應不同的紗。找不到時工具會說「這個 Dessin 只有在某某品項有，不是這個品項，未採用」，把判斷留給人。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 誰是真相</span><h3>上傳的檔案優先於內嵌主檔，但差異要看得見</h3><p>內嵌主檔會過期，所以每次丟新主檔都以檔案為準。但如果同一品項的係數和內嵌值不同，Kontrolle 第一列就寫「檔案說 X，之前是 Y，用檔案的值，請確認」。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 第一眼</span><h3>印章只有紅綠兩色</h3><p>備料人員最先要知道的是「這份能不能直接用」。印章顯示位置總數、每張訂單的合計公尺是否等於 PDF 上的 Gesamtmenge、有幾個位置缺主檔。任何一項不對，整個印章變紅；全對才綠。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 實際發生過的錯</span><h3>同一張訂單載兩次直接標紅；0.5 公尺的位置提醒是佔位列</h3><p>兩個都是實際用的時候踩過的：訂單拖兩次數量變雙倍；客戶用極小公尺數的位置當樣品或佔位，不該進採購量。工具不替人決定，但一定要讓人看到。</p></article>
+</section>
+
+<section class="cs-chapter" id="c4"><h2 class="cs-chapter-title"><span>04</span>怎麼運作</h2>
+<article class="cs-card"><span class="cs-label">流程</span><h3>六段，程式也是這樣分</h3><ul class="cs-list"><li><b>讀主檔</b>：嗅工作表裡的標籤判斷是品項主檔還是色號主檔；品項編號從「Artikel」旁的格、編號樣式、工作表名三層推。</li><li><b>讀訂單 PDF</b>：取每個文字的座標，依 y 重組成行，再用正則抓位置列、Artikel-Nr.、Farbe、左右側（可能寫在品項欄也可能在顏色欄）與 ACHTUNG 提示。</li><li><b>對應與計算</b>：Stk ＝ 公尺 ÷ Stk.L.（品項自己的，沒有才用預設）；kg ＝ 每件克重 × Stk。</li><li><b>排序與彙總</b>：紗號自然排序，純數字先、再前綴族群；位置清單壓成「3, 5–9, 14」。</li><li><b>畫面</b>：Positionen／Garnsummen／Kontrolle 三分頁加印章。</li><li><b>Excel</b>：凍結首列、橫向列印、分組小計、缺主檔整列標色，第四張表列出用了哪些係數、哪些是預設值。</li></ul></article>
+<article class="cs-card"><span class="cs-label">技術</span><h3>一個 4.5 MB 的檔，完全離線</h3><p>pdf.js、SheetJS、ExcelJS 三個函式庫以 base64 內嵌，開頁時解碼執行，PDF 解析 worker 用 Blob URL；所以公司電腦不需要網路、不需要安裝。德式數字、Excel 浮點、含品項編號的工作表名等髒資料都有處理。自己寫的程式約 36 KB。</p></article>
+<article class="cs-card"><span class="cs-label">作品集版本</span><h3>資料全部換成虛構，流程一行沒改</h3><p>移除客戶與公司名稱；內嵌主檔換成 4 個虛構品項、10 個 Dessin，刻意涵蓋「有第二支經紗」「沒有第二支緯紗」「沒有 Stk.L.」「第二支紗號和第一支不同」等情況。加了「載入示範訂單」按鈕和一份可下載的虛構訂單 PDF（7 個位置，含左側標記、ACHTUNG 提示、一個故意找不到 Dessin 的位置、一個 0.5 公尺的佔位列），走真實的 PDF 解析路徑。</p><div class="actions"><a class="btn primary" href="work/yarn-calculator/index.html?demo=1" target="_blank" rel="noopener">開啟並載入示範訂單 ↗</a><a class="btn" href="work/yarn-calculator/Demo-Bestellung.pdf" download>下載示範 PDF 自己丟</a></div></article>
+</section>
+
+<section class="cs-chapter" id="c5"><h2 class="cs-chapter-title"><span>05</span>限制與誠實說明</h2>
+<article class="cs-card"><span class="cs-label">限制</span><h3>它認得一家客戶的訂單版型，不是通用 PDF 解析器</h3><p>位置列格式、Artikel-Nr. 與 Farbe 的標籤是依一家客戶的訂購單寫的正則，換一家客戶就要改。主檔解析依賴 Excel 裡的標籤文字，標籤改了會讀不到。單人本機工具，沒有版本控管與歷史紀錄。原版曾用於一季的實際備料；作品集版本的所有數字都是虛構，不代表任何真實品項。</p><div class="actions"><a class="btn" href="case-parola.html">上一個工具：Parola 義大利文練習 →</a><a class="btn" href="case-annotator.html">回到第一個工具：布樣標註 →</a></div></article>
+<div class="back-row"><a class="btn" href="index.html">← 返回作品集首頁</a><a class="btn" href="index.html#tools">其他 Tools</a></div>
+</section>
+
+</div></div>
+</main>
+<footer class="site-footer"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><span>Tools 04 · 紗線需求計算器 · 2026 · <a href="mailto:Kerijanschitz@outlook.com">Kerijanschitz@outlook.com</a> · <a href="case-yarn-en.html" lang="en">English</a></span><a href="#top">回到頂端 ↑</a></div></footer>
+<script src="case.js"></script></body></html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f4ee">
+<meta name="description" content="iPAS AI 應用規劃師初級原創擬真題練習：依評鑑主題與星等選題、錯題本自動收錄、各方向掌握度追蹤。">
+<title>iPAS 初級｜原創擬真題練習</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* 作品集外框列（只在作品集靜態站出現，不屬於原產品） */
+.pf-bar { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:8px 14px; font-size:12px; line-height:1.4; color:#9a9083; background:transparent; border-bottom:1px solid rgba(120,108,88,.18); }
+.pf-bar a { color:#9a9083; text-decoration:none; }
+.pf-bar a:hover { text-decoration:underline; }
+.demo-entry { margin:1rem 0 0; text-align:center; font-size:.84rem; }
+.demo-entry a { color:var(--ink-soft); text-decoration:underline; text-underline-offset:3px; }
+.demo-entry a:hover { color:var(--ink); }
+</style>
+<script>
+/* 在樣式表生效前就把主題定好，否則深色使用者每次開頁都會先閃一下白底。
+   這段一定要留在 <head> 且不可 defer。app.js 之後再接手切換與記錄。 */
+(function () {
+  try {
+    var saved = localStorage.getItem('ipas.theme');
+    document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
+  } catch (e) {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+})();
+</script>
+</head>
+<body>
+<div class="pf-bar"><span>iPAS 擬真題練習 · 作品集示範</span><a href="../../../index.html">← 作品集</a></div>
+
+<header class="topbar">
+  <div class="topbar__title">iPAS AI 應用規劃師（初級）· 擬真題練習</div>
+  <div class="topbar__actions">
+    <button id="btn-theme" type="button" class="themetoggle" aria-pressed="false">
+      <span class="themetoggle__icon" aria-hidden="true">◐</span>
+      <span class="themetoggle__label" aria-hidden="true"></span>
+    </button>
+    <div class="topbar__right">
+      <span id="who" class="who"></span>
+      <span id="expiry" class="expiry"></span>
+      <button id="btn-logout" type="button" class="linkbtn">登出</button>
+    </div>
+  </div>
+</header>
+<div id="build-banner" class="banner"></div>
+
+<!-- ========== 登入／註冊 ========== -->
+<main id="screen-auth" class="screen auth-layout" aria-labelledby="auth-title" hidden>
+  <div class="auth-intro">
+    <p class="eyebrow">IPAS / STUDY ARCHIVE <span>001</span></p>
+    <span class="demo-pill">原創擬真題 · 非官方試題</span>
+    <h1 id="auth-title" class="display-title">把每一次練習，<br>變成<em>看得見的進步。</em></h1>
+    <p class="intro-copy">依官方評鑑主題整理練習、追蹤掌握度，把值得再看一次的題目留在錯題本。</p>
+    <div class="intro-rule"><span>AI 應用規劃師 · 初級</span><span>學習紀錄 / 2026</span></div>
+  </div>
+  <div class="auth-card card">
+  <p class="section-kicker">帳號入口 <span>／ 先從這裡開始</span></p>
+  <div class="authtabs" role="tablist" aria-label="帳號操作">
+    <button type="button" class="authtab is-on" role="tab" aria-selected="true" data-pane="login">登入</button>
+    <button type="button" class="authtab" role="tab" aria-selected="false" data-pane="register">註冊</button>
+  </div>
+
+  <form id="form-login" class="authpane" data-pane="login">
+    <label>Email<input id="login-email" type="email" autocomplete="username" required></label>
+    <label>密碼<input id="login-pw" type="password" autocomplete="current-password" required></label>
+    <button type="submit" class="primary">登入</button>
+  </form>
+
+  <form id="form-register" class="authpane" data-pane="register" hidden>
+    <label>Email<input id="reg-email" type="email" autocomplete="username" required></label>
+    <label>密碼（至少 6 個字）<input id="reg-pw" type="password" autocomplete="new-password" required></label>
+    <label>再輸入一次<input id="reg-pw2" type="password" autocomplete="new-password" required></label>
+    <button type="submit" class="primary">註冊</button>
+  </form>
+
+  <p id="auth-msg" class="msg" role="alert"></p>
+
+  <p class="demo-entry"><a href="?demo=1">直接試玩（不用註冊，資料只留在這個分頁）</a></p>
+
+  <div class="disclosure">
+    <strong>這是示範版帳號。</strong>
+    帳號與進度只存在你自己的瀏覽器裡，不會上傳到伺服器、不會同步到其他裝置，
+    清除瀏覽資料就會消失。<strong>請不要使用你在其他服務的真實密碼。</strong>
+  </div>
+  </div>
+</main>
+
+<!-- ========== 啟用碼 ========== -->
+<main id="screen-activate" class="screen auth-layout" aria-labelledby="activate-title" hidden>
+  <div class="auth-intro">
+    <p class="eyebrow">IPAS / ACCESS <span>002</span></p>
+    <span class="demo-pill">原創擬真題 · 非官方試題</span>
+    <h1 class="display-title">你的學習檔案，<br><em>準備啟用。</em></h1>
+    <p class="intro-copy">輸入啟用碼後，就能開始整理自己的練習進度。</p>
+  </div>
+  <div class="auth-card card">
+  <p class="section-kicker">啟用帳號 <span>／ 180 天練習期</span></p>
+  <h2 id="activate-title">輸入啟用碼</h2>
+  <p class="note">帳號：<span id="activate-who"></span></p>
+  <form id="form-activate">
+    <label>啟用碼
+      <input id="activate-code" type="text" placeholder="IPAS-XXXX-XXXX" autocomplete="off" required>
+    </label>
+    <button type="submit" class="primary">開通</button>
+  </form>
+  <p id="activate-msg" class="msg" role="alert"></p>
+
+  <details class="demo">
+    <summary>測試用啟用碼</summary>
+    <ul>
+      <li><code>IPAS-DEMO-2026</code>　正常開通，180 天</li>
+      <li><code>IPAS-USED-0000</code>　模擬「已被使用」</li>
+      <li><code>IPAS-EXPD-1999</code>　模擬「已過期」</li>
+    </ul>
+  </details>
+
+  <button id="activate-logout" type="button" class="linkbtn">換一個帳號</button>
+  </div>
+</main>
+
+<!-- ========== 主畫面 ========== -->
+<main id="screen-app" class="screen" hidden>
+  <div class="app-intro">
+    <p class="eyebrow">IPAS / QUESTION ARCHIVE <span>2026</span></p>
+    <div class="app-intro__row"><h1 class="display-title">擬真題<em>檔案室。</em></h1><span class="demo-pill">原創擬真題 · 非官方試題</span></div>
+    <p class="intro-copy">以每道題，整理你已經會的，以及值得再練一次的。</p>
+  </div>
+  <nav class="nav" role="tablist" aria-label="主要頁面">
+    <button type="button" class="navtab is-on" role="tab" aria-selected="true" data-tab="progress">進度</button>
+    <button type="button" class="navtab" role="tab" aria-selected="false" data-tab="practice">練習</button>
+    <button type="button" class="navtab" role="tab" aria-selected="false" data-tab="wrong">錯題本</button>
+  </nav>
+
+  <!-- 進度 -->
+  <section class="tabpane" data-tab="progress" aria-labelledby="progress-title">
+    <div class="section-heading"><div><p class="section-kicker">01 / LEARNING PROGRESS</p><h2 id="progress-title">你的<em>學習進度</em></h2></div><span class="section-side">每一次作答，都算數。</span></div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat__label">已作答</div>
+        <div class="stat__value"><span id="stat-answered">0</span><small id="stat-answered-total"></small></div>
+        <div class="stat__hint">累積完成的練習題</div>
+      </div>
+      <div class="stat">
+        <div class="stat__label">正確率</div>
+        <div class="stat__value" id="stat-accuracy">0%</div>
+        <div class="stat__hint">目前答對的比例</div>
+      </div>
+      <div class="stat">
+        <div class="stat__label">待複習錯題</div>
+        <div class="stat__value" id="stat-wrong">0</div>
+        <div class="stat__hint">留著下次再練</div>
+      </div>
+    </div>
+
+    <div class="mastery-heading"><div><p class="section-kicker">SUBJECT MAP / 07</p><h3>各方向掌握度</h3></div><img src="img/sticker_01.png" alt="" class="mastery-sticker" aria-hidden="true"></div>
+    <p class="note">
+      綠 ≥85%，黃 60–84%，紅 &lt;60%。比例是「該方向做過的題裡目前答對的比例」。
+      方向＝官方 115.06 評鑑內容範圍的 7 個評鑑主題，不是自訂分類。
+    </p>
+    <div id="mastery-list" class="masterylist"></div>
+  </section>
+
+  <!-- 練習 -->
+  <section class="tabpane" data-tab="practice" aria-labelledby="practice-title" hidden>
+    <div class="section-heading"><div><p class="section-kicker">02 / PRACTICE</p><h2 id="practice-title">選題<em>練習</em></h2></div><span class="section-side">把注意力留給題目。</span></div>
+    <div id="practice-setup" class="card">
+      <h3>挑題目</h3>
+
+      <fieldset>
+        <legend>方向（評鑑主題）</legend>
+        <div id="filter-topics" class="chkgrid"></div>
+        <p class="note">都不勾＝全部。</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>星等</legend>
+        <div id="filter-stars" class="chkgrid">
+          <label class="chk"><input type="checkbox" value="1"><span>★☆☆ 定義辨析</span></label>
+          <label class="chk"><input type="checkbox" value="2"><span>★★☆ 情境／順序／法規</span></label>
+          <label class="chk"><input type="checkbox" value="3"><span>★★★ 反向／取捨／指標</span></label>
+        </div>
+        <p class="note">星等是我們自己依題型分的，不是官方難度。</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>出題方式</legend>
+        <label class="chk"><input id="opt-unseen" type="checkbox" checked><span>優先出沒做過的題</span></label>
+        <label class="inline">這輪題數
+          <select id="opt-limit">
+            <option value="10">10 題</option>
+            <option value="20" selected>20 題</option>
+            <option value="50">50 題</option>
+            <option value="0">不限</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <p class="note">符合條件的題目：<strong id="pool-count">0</strong> 題</p>
+      <button id="btn-start" type="button" class="primary">開始練習</button>
+      <p id="practice-msg" class="msg" role="status"></p>
+    </div>
+
+    <div id="practice-run" class="card" hidden>
+      <div class="runbar">
+        <span id="run-label" class="runbar__label"></span>
+        <span id="run-count" class="runbar__count"></span>
+        <button id="btn-quit" type="button" class="linkbtn">結束這輪</button>
+      </div>
+      <p id="q-meta" class="qmeta"></p>
+      <p id="q-stem" class="qstem"></p>
+      <div id="q-options" class="options"></div>
+      <div id="q-explain" class="explain" role="status" hidden></div>
+      <button id="btn-next" type="button" class="primary" hidden>下一題</button>
+    </div>
+  </section>
+
+  <!-- 錯題本 -->
+  <section class="tabpane" data-tab="wrong" aria-labelledby="wrong-title" hidden>
+    <div class="section-heading"><div><p class="section-kicker">03 / REVIEW NOTES</p><h2>值得<em>再看一次</em></h2></div><span class="section-side">從錯誤裡，找到下一步。</span></div>
+    <div class="card">
+      <h3 id="wrong-title">錯題本（<span id="wrong-count">0</span> 題）</h3>
+      <p class="note">答錯的題會自動收進來，之後答對一次就移除。</p>
+      <button id="btn-practice-wrong" type="button" class="primary">練這些題</button>
+      <div id="wrong-list" class="wronglist"></div>
+    </div>
+  </section>
+
+  <!-- 官方資源 -->
+  <section class="resources" aria-labelledby="resources-title">
+    <h3 id="resources-title">官方資料</h3>
+    <p class="note">本站為個人備考工具，與經濟部產業發展署及 iPAS 無任何關聯。考試資訊一律以官網為準。</p>
+    <div class="resource-links">
+      <a href="https://www.ipas.org.tw/" target="_blank" rel="noopener noreferrer">iPAS 官方網站 <span aria-hidden="true">↗</span></a>
+      <a href="https://www.ipas.org.tw/AI" target="_blank" rel="noopener noreferrer">AI 應用規劃師專區 <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="sitefoot">
+  <span>iPAS 初級原創擬真題練習</span>
+  <span>非 iPAS 官方網站</span>
+</footer>
+
+<script src="data/questions.js"></script>
+<script src="js/store.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

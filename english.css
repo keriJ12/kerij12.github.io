@@ -1,0 +1,17 @@
+/* English preview: preserve the existing palette and adapt text rhythm. */
+html[lang=en] body{font-family:"Segoe UI",Arial,sans-serif}
+html[lang=en] h1{letter-spacing:-.045em;line-height:1.08;font-size:clamp(42px,4.7vw,68px)}
+html[lang=en] h2{letter-spacing:-.035em;line-height:1.16}
+html[lang=en] h3{line-height:1.3}
+html[lang=en] .lead{line-height:1.75;max-width:660px}
+html[lang=en] .site-nav{flex-wrap:wrap}
+html[lang=en] .project-meta b,html[lang=en] .featured-meta b{line-height:1.5;display:block}
+html[lang=en] .ticket{max-width:90%}
+html[lang=en] .ticket b{font-size:12px}
+html[lang=en] .journey-tabs small{font-size:8px}
+html[lang=en] .journey-tabs b{font-size:16px}
+html[lang=en] .data-row{gap:18px;align-items:flex-start}
+html[lang=en] .data-row b{text-align:right}
+html[lang=en] .qc-card{flex-wrap:wrap}
+html[lang=en] .status{white-space:normal}
+@media(max-width:700px){html[lang=en] h1{font-size:clamp(36px,9vw,52px)}html[lang=en] .logo small{display:none}html[lang=en] .journey-tabs b{font-size:11px}html[lang=en] .scene h3{font-size:23px}html[lang=en] .final-cta span{font-size:40px}}

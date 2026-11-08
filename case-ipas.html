@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="iPAS 擬真題練習站與 AI 陪讀：依官方評鑑主題選題、三層解析、錯題本，再由陪讀角色一題一題帶複習，不先給答案。"><title>iPAS 擬真題練習 ＋ AI 陪讀｜Case Study — Keri Janschitz 作品集</title><link rel="stylesheet" href="site.css"><link rel="stylesheet" href="theme-midnight.css"></head>
+<body class="cs-page">
+<a class="skip" href="#main">跳到主要內容</a>
+<header class="site-header"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><nav class="site-nav" aria-label="網站導覽"><a href="index.html#case-studies" aria-current="page">Case Studies</a><a href="index.html#tools">Tools</a><a href="index.html#playground">Playground</a><a href="index.html#about">About</a><a class="lang-switch" href="case-ipas-en.html" lang="en" hreflang="en" title="English version">EN</a><a class="btn small primary" href="work/ipas/practice/index.html?demo=1" target="_blank" rel="noopener">直接試玩 ↗</a></nav></div></header>
+<main id="main">
+<section class="cs-hero" id="top"><div class="wrap"><nav class="crumbs" aria-label="路徑"><a href="index.html">作品集首頁</a><span>/</span><a href="index.html#case-studies">Case Studies</a><span>/</span><span>學習工具 · 考試練習與 AI 陪讀</span></nav><h1>iPAS 擬真題練習 ＋ AI 陪讀｜先問你在考什麼，再談答案</h1><p class="cs-intro">給 iPAS AI 應用規劃師初級考生的學習閉環：純前端練習站依官方七個評鑑主題選題，每題附「考點、辨識訊號、干擾形狀」三層解析，答錯自動進錯題本；錯題本匯出後交給「陪讀學姊」，用蘇格拉底式提問一題一題找出到底是不知道考點、不會規則，還是被選項帶走。題目全部原創，不是官方試題。</p><div class="actions"><a class="btn primary" href="work/ipas/practice/index.html?demo=1" target="_blank" rel="noopener">直接試玩練習站 ↗</a><a class="btn" href="work/ipas/tutor.html" target="_blank" rel="noopener">看陪讀學姊（預錄示範）↗</a></div></div><div class="wrap"><ul class="cs-meta"><li>學習產品 · 概念到可用</li><li>內容設計 · 對話設計</li><li>2026 · 原創題 · 非官方</li><li>純前端 · 零外部 CDN</li></ul></div><div class="wrap cs-hero-shots cs-hero-two"><figure><img src="assets/work-ipas.png" alt="iPAS 擬真題練習站主畫面：依評鑑主題與星等選題、掌握度、錯題本"><figcaption>練習站：依官方評鑑主題選題、掌握度與錯題本</figcaption></figure><figure><img src="assets/work-tutor.png" alt="陪讀學姊示範頁：左側錯題本與匯出，右側對話面板一題一題帶複習"><figcaption>陪讀學姊：匯出錯題本，一題一題對話式診斷</figcaption></figure></div></section>
+
+<div class="wrap cs-layout">
+<aside class="cs-toc" aria-label="章節目錄"><ol><li><a href="#c1"><span>01</span>背景</a></li><li><a href="#c2"><span>02</span>問題</a></li><li><a href="#c3"><span>03</span>練習站的設計</a></li><li><a href="#c4"><span>04</span>陪讀的設計</a></li><li><a href="#c5"><span>05</span>技術與邊界</a></li><li><a href="#c6"><span>06</span>限制與誠實說明</a></li></ol><a class="cs-toc-back" href="index.html#case-studies">← 返回 Case Studies</a></aside>
+<div class="cs-body">
+
+<section class="cs-chapter" id="c1"><h2 class="cs-chapter-title"><span>01</span>背景</h2>
+<article class="cs-card"><span class="cs-label">情境</span><h3>準備一個新證照，市面上的練習題不是太少就是來路不明</h3><p>iPAS AI 應用規劃師是台灣新的能力鑑定，初級分「人工智慧基礎概論」與「生成式 AI 應用與規劃」兩科。考生需要依官方評鑑內容範圍練題，但官方題目有著作權，坊間題庫常分不清哪些是真題、哪些是改寫。我自己也是考生，想做一個練習工具，同時把「怎麼複習錯題」這件事做對。</p></article>
+</section>
+
+<section class="cs-chapter" id="c2"><h2 class="cs-chapter-title"><span>02</span>問題</h2>
+<article class="cs-card"><span class="cs-label">問題陳述</span><h3>錯一題有三種病因，直接看解析會讓三種人聽到同一份內容</h3><p>答錯可能是不知道這題在考什麼，可能知道考點但不會規則，也可能會規則卻被選項帶走。處方完全不同。一般練習題的「解析」只回答第一種。所以這個案子的設計目標是：練習站讓每一題的解析結構能支撐診斷，陪讀角色則先問、再教、最後要考生自己說一次。</p></article>
+<article class="cs-card"><span class="cs-label">範圍</span><h3>做什麼、刻意不做什麼</h3><div class="cs-moscow"><div><h4>做</h4><ul><li>依官方七個評鑑主題與評鑑內容代碼出題</li><li>三層解析：考點、辨識訊號、干擾形狀</li><li>錯題本（答對一次即移除）、各主題掌握度</li><li>錯題本匯出為 JSON，交給陪讀</li><li>陪讀：一次一題、三層診斷樹、變化題、收尾建議</li><li>純前端、帳號與進度只存本機</li></ul></div><div><h4>刻意不做</h4><ul><li>官方歷屆試題、任何「官方考過」的暗示</li><li>後端、付費、跨裝置同步</li><li>靜態站上假裝有即時 AI</li><li>心理分析式的學習診斷</li></ul></div></div></article>
+</section>
+
+<section class="cs-chapter" id="c3"><h2 class="cs-chapter-title"><span>03</span>練習站的設計</h2>
+<article class="cs-card cs-card-shot"><div><span class="cs-label">決策 · 分類</span><h3>用官方評鑑主題分類，不自創章節</h3><p>七個主題直接對應官方 115.06 評鑑內容範圍，每題再對到評鑑內容代碼。考生看一眼掌握度就知道要回講義哪一章。星等（定義辨析／情境順序法規／反向取捨指標）是自訂的題型分級，頁面上明寫「不是官方難度」。</p></div><figure><img src="assets/work-ipas.png" alt="練習站主畫面" ></figure></article>
+<article class="cs-card"><span class="cs-label">決策 · 解析</span><h3>每題固定三層：考點、辨識訊號、干擾形狀</h3><p>「為什麼對」「題幹哪句是線索」「錯選項怎麼騙人」拆開寫，考生才能把一題的經驗遷移到變化題。這三層同時是題庫資料結構的欄位，也是陪讀 AI 唯一允許引用的解釋依據。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 原創</span><h3>題目全部原創，而且要「看得出是擬真題」</h3><p>公開站若放歷屆題，既有法律風險，也會誤導「這就是會考的題」。原創題依評鑑內容代碼撰寫，頁面四處標「原創擬真題・非官方試題」，連題目來源標籤都刻意讓人一眼看出是擬真。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 帳號</span><h3>純前端也做密碼雜湊，並且叫使用者別用真密碼</h3><p>帳號、進度都在瀏覽器本機。即使如此，密碼仍用 PBKDF2 雜湊（十二萬次迭代、每帳號隨機鹽），避免有人偷懶用真實密碼後被看一眼就外洩；同時在畫面上直接警告不要使用其他服務的密碼。作品集版本加了「直接試玩」入口：資料只存在這個分頁，關掉就消失。</p></article>
+</section>
+
+<section class="cs-chapter" id="c4"><h2 class="cs-chapter-title"><span>04</span>陪讀的設計</h2>
+<article class="cs-card cs-card-shot"><div><span class="cs-label">決策 · 第一句</span><h3>「先不看答案。你知道這題主要在考哪一個觀念嗎？」</h3><p>一次只處理一題、一次只問一句，問完就停。說不出考點，補考點與講義白話；說得出考點，問核心規則；說得出規則，問「那為什麼不是你選的那個」，用辨識訊號指題幹關鍵句、用干擾形狀拆錯選項。答到哪層診斷就停在哪層。</p></div><figure><img src="assets/work-tutor.png" alt="陪讀學姊對話面板"></figure></article>
+<article class="cs-card"><span class="cs-label">決策 · 確認學會</span><h3>教完要考生用自己的話說一次，再出一題換情境的變化題</h3><p>答對才進下一題，連錯兩次標記「需要再次複習」。收尾列出要回講義看的代碼、三題口頭回想題（不給答案）、建議明天練哪個主題幾題。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 紅線</span><h3>陪讀只能引用題目欄位與講義摘錄</h3><p>生成式模型最大的風險是把法規數字、年份講錯。把知識來源限制在考題資料與講義，模型從「百科」退回「家教」，錯誤面積大幅縮小。不確定就說「講義沒寫，請查官方公告」；不代答、不一次貼完所有解析；每則回覆不超過十二行。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 誠實</span><h3>靜態站上是預錄劇本，三處標明，不假裝即時</h3><p>陪讀頁有兩種模式：在支援即時模型的環境裡走真對話；其他環境一律播放一段十四則的預錄劇本，並以標籤、提示列、對話內系統訊息三處寫明「預錄示範，非即時 AI」。與其接一個會壞的 API 或用假回覆裝成 AI，不如把對話設計本身當作展示重點。</p></article>
+</section>
+
+<section class="cs-chapter" id="c5"><h2 class="cs-chapter-title"><span>05</span>技術與邊界</h2>
+<article class="cs-card"><span class="cs-label">技術重點</span><h3>零外部 CDN、自帶字型、四個小模組</h3><ul class="cs-list"><li><b>結構</b>：儲存層（唯一碰 storage 的地方）→ 帳號 → 選題與計分（純邏輯不碰畫面）→ 畫面與事件，四個檔案各司其職。</li><li><b>字型自帶</b>：源泉圓體、jf open 粉圓、JetBrains Mono 放在本機，開 file:// 也能完整顯示，不洩漏使用者 IP 給字型供應商。</li><li><b>深淺色</b>：手動切換，頁面載入前先套用，深色使用者不會閃白。</li><li><b>試玩入口</b>：`?demo=1` 把儲存層切到 sessionStorage，建立一個無法用密碼登入的試玩帳號；登出即清空，正常帳號的雜湊程式碼一字未動。</li><li><b>錯題本格式</b>：JSON 自帶給 AI 的說明，丟到任何聊天模型也能開始。</li></ul></article>
+</section>
+
+<section class="cs-chapter" id="c6"><h2 class="cs-chapter-title"><span>06</span>限制與誠實說明</h2>
+<article class="cs-card"><span class="cs-label">限制</span><h3>八題示範、無後端、陪讀在這裡是預錄</h3><p>作品集版本只有八題原創示範題，掌握度與錯題本在這個量下只能看出機制。帳號與啟用碼全在瀏覽器裡，任何人開開發者工具都能改自己的狀態，這是流程示範而不是會員系統。陪讀頁的錯題資料是寫死的兩題，「匯出」只是觸發開始；靜態站沒有接任何模型。與 iPAS 官方無任何關聯，所有考試資訊以官網為準。</p><div class="actions"><a class="btn primary" href="work/ipas/practice/index.html?demo=1" target="_blank" rel="noopener">直接試玩練習站 ↗</a><a class="btn" href="work/ipas/tutor.html" target="_blank" rel="noopener">陪讀學姊（預錄）↗</a><a class="btn" href="case-weave.html">下一個案例：織序 →</a></div></article>
+<div class="back-row"><a class="btn" href="index.html">← 返回作品集首頁</a><a class="btn" href="index.html#case-studies">其他 Case Studies</a></div>
+</section>
+
+</div></div>
+</main>
+<footer class="site-footer"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><span>Case Study 02 · iPAS 擬真題練習 ＋ AI 陪讀 · 2026 · <a href="mailto:Kerijanschitz@outlook.com">Kerijanschitz@outlook.com</a> · <a href="case-ipas-en.html" lang="en">English</a></span><a href="#top">回到頂端 ↑</a></div></footer>
+<script src="case.js"></script></body></html>

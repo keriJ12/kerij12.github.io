@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="洗標符號組合器：選好符號，輸出實體尺寸正確、寫入 dpi 的洗標圖片，取代在繪圖軟體裡手動拼貼。"><title>洗標符號組合器｜Tools — Keri Janschitz 作品集</title><link rel="stylesheet" href="site.css"><link rel="stylesheet" href="theme-midnight.css"></head>
+<body class="cs-page">
+<a class="skip" href="#main">跳到主要內容</a>
+<header class="site-header"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><nav class="site-nav" aria-label="網站導覽"><a href="index.html#case-studies">Case Studies</a><a href="index.html#tools" aria-current="page">Tools</a><a href="index.html#playground">Playground</a><a href="index.html#about">About</a><a class="lang-switch" href="case-washsymbol-en.html" lang="en" hreflang="en" title="English version">EN</a><a class="btn small primary" href="work/washsymbol/index.html" target="_blank" rel="noopener">開啟工具 ↗</a></nav></div></header>
+<main id="main">
+<section class="cs-hero" id="top"><div class="wrap"><nav class="crumbs" aria-label="路徑"><a href="index.html">作品集首頁</a><span>/</span><a href="index.html#tools">Tools</a><span>/</span><span>紡織業 · 洗標製作</span></nav><h1>洗標符號組合器｜選好符號，輸出實體尺寸正確的洗標圖</h1><p class="cs-intro">為一家奧地利紡織公司負責洗標（Pflegekennzeichnung）的同事做的單檔工具：按固定順序選洗滌、漂白、熨燙、專業保養、烘乾符號，即時預覽成標籤帶，輸出指定公分尺寸、寫入 dpi 的 JPEG 或 PNG。貼進 Word 或 Illustrator 就是正確大小，不必再手動縮放。</p><div class="actions"><a class="btn primary" href="work/washsymbol/index.html" target="_blank" rel="noopener">開啟工具（德文介面）↗</a><a class="btn" href="#c3">看設計決策 ↓</a></div></div><div class="wrap"><ul class="cs-meta"><li>內部工具 · 實際使用情境</li><li>需求定義 · AI 輔助實作</li><li>2026 · 德文介面 · 三語標註</li><li>單一 HTML · 離線可用</li></ul></div><div class="wrap cs-hero-shots cs-hero-one"><figure><img src="assets/work-washsymbol.png" alt="洗標符號組合器：左側分組符號選擇與預設組合，右側標籤帶即時預覽與尺寸、dpi、配色設定"><figcaption>左側依固定順序選符號或套用預設組合，右側即時預覽標籤帶與輸出設定</figcaption></figure></div></section>
+
+<div class="wrap cs-layout">
+<aside class="cs-toc" aria-label="章節目錄"><ol><li><a href="#c1"><span>01</span>背景</a></li><li><a href="#c2"><span>02</span>問題</a></li><li><a href="#c3"><span>03</span>設計決策</a></li><li><a href="#c4"><span>04</span>技術重點</a></li><li><a href="#c5"><span>05</span>限制與誠實說明</a></li></ol><a class="cs-toc-back" href="index.html#tools">← 返回 Tools</a></aside>
+<div class="cs-body">
+
+<section class="cs-chapter" id="c1"><h2 class="cs-chapter-title"><span>01</span>背景</h2>
+<article class="cs-card"><span class="cs-label">現場</span><h3>每個新品項都要一條洗標，動作重複但容錯低</h3><p>洗標符號有固定的國際標準與慣用順序，公司也有一套自己常用的組合。原本的做法是從一堆符號圖檔裡手動挑、拉進 Word、逐一調大小對齊。尺寸常常不一致，順序偶爾漏掉，出圖後實際印出來的大小也不一定對。做洗標的人不是設計師，也不應該需要是。</p></article>
+<article class="cs-card"><span class="cs-label">使用環境</span><h3>公司電腦、瀏覽器、不能安裝軟體</h3><p>使用者在公司電腦上直接雙擊開一個本機 HTML，沒有伺服器，也不能裝任何東西。這個限制決定了它必須是單一檔案、離線可用，所有符號圖都內嵌在檔案裡。</p></article>
+</section>
+
+<section class="cs-chapter" id="c2"><h2 class="cs-chapter-title"><span>02</span>問題</h2>
+<article class="cs-card"><span class="cs-label">問題陳述</span><h3>手工拼貼最花時間的，是「輸出後尺寸不對」這一步</h3><p>畫面上看起來對，貼進排版軟體卻要再縮放一次，縮放後又怕失真。真正要解決的不是「怎麼更快拼符號」，而是「輸出的檔案一開啟就是正確的實體尺寸」。這個問題說清楚之後，整個工具的核心就只剩一件事：以公分為單位思考，把 dpi 寫進檔案。</p></article>
+</section>
+
+<section class="cs-chapter" id="c3"><h2 class="cs-chapter-title"><span>03</span>設計決策</h2>
+<article class="cs-card"><span class="cs-label">決策 · 核心</span><h3>以公分為框架，把 dpi 寫進 JPEG 與 PNG</h3><p>使用者輸入的是「6 × 1.5 cm」，不是像素。程式用公分與 dpi 算出畫布像素，把符號區塊盡量大、置中塞進這個框；匯出時把 dpi 寫進 JPEG 的 JFIF 標頭或 PNG 的 pHYs 區塊。Word、Illustrator、InDesign 開檔時直接就是 6 × 1.5 cm。「開啟即正確」才真的省掉了原本的手工。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 順序</span><h3>不論點選順序，輸出一律按標準順序排列</h3><p>洗滌 → 漂白 → 熨燙 → 專業保養 → 烘乾，這是洗標的慣用順序。把順序從人的記憶裡拿掉，就少一類錯誤。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 預設組合</span><h3>九成的洗標只是幾種固定搭配的輪替</h3><p>以「不漂白、P 乾洗、不烘乾」為基底，只變化洗滌與熨燙溫度，做成九組一鍵套用的預設組合，並自動帶出建議檔名。先套用再微調，比每次從零點選快，也不會漏選。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 配色</span><h3>只給三種配色，不開放自由選色</h3><p>黑底白、白底黑、深藍底白，對應常見的布標底色。洗標印刷通常只有單色，自由選色反而容易選出印不出來的顏色。技術上用畫布合成把同一組黑色符號染成目標色，所以一套符號圖服務所有配色。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 三語</span><h3>每個符號從一開始就帶德、英、繁中三語說明</h3><p>公司面對德語市場，但部分訂單與供應鏈文件需要英文或中文。圖例與可選的圖內文字共用同一份資料，三種語言不會彼此對不上。</p></article>
+</section>
+
+<section class="cs-chapter" id="c4"><h2 class="cs-chapter-title"><span>04</span>技術重點</h2>
+<article class="cs-card"><span class="cs-label">自己寫的部分</span><h3>兩段沒有函式庫的位元組操作</h3><ul class="cs-list"><li><b>JPEG dpi</b>：讀取輸出的 blob，確認 APP0 標記與 JFIF 簽名，直接改寫密度單位與 X/Y 密度位元組。</li><li><b>PNG dpi</b>：把 dpi 換成每公尺像素數，組出 pHYs 區塊，自己算 CRC32，插在 PNG 簽名與 IHDR 之後。</li><li><b>版面演算法</b>：先以單位尺寸算出符號區塊含文字的寬高，再算出能放進「畫布減邊距」的縮放係數，重新排版後置中繪製；每個符號有相對高度校正視覺大小。</li><li><b>容錯</b>：尺寸欄位接受德式逗號小數；載入設定時檢查符號 id 是否還存在，避免舊資料讓程式壞掉。</li></ul></article>
+<article class="cs-card"><span class="cs-label">形式</span><h3>單一 HTML，約 1 MB，其中 97% 是內嵌符號圖</h3><p>32 個符號 PNG 以 base64 內嵌，程式本體約 30 KB。代價是檔案大，換來「一個檔案、哪裡都能開」。設定存在瀏覽器裡，重開檔案就接續上次的尺寸、dpi、配色。</p></article>
+</section>
+
+<section class="cs-chapter" id="c5"><h2 class="cs-chapter-title"><span>05</span>限制與誠實說明</h2>
+<article class="cs-card"><span class="cs-label">限制</span><h3>它解決的是一家公司的一個工作，不是通用洗標產生器</h3><p>介面是德文，只有圖內標註有三語。符號集來自實際工作需要的 32 個，不是完整的國際標準符號表。符號永遠一列或一欄，超過框架就整體縮小，不會換行。圖內中文字型落到作業系統預設字型，不同電腦會略有差異。作品集版本已移除公司名稱與內部的預設組合命名，功能不變。</p></article>
+<article class="cs-card"><span class="cs-label">為什麼放進作品集</span><h3>它示範了「把問題講對」比「功能多」更重要</h3><p>如果當初的需求是「做一個更快的符號拼貼工具」，大概會得到一個更漂亮的拼貼工具。因為問題被講成「輸出要一開啟就是正確尺寸」，才會長出 dpi 寫入這個真正省工的功能。</p><div class="actions"><a class="btn primary" href="work/washsymbol/index.html" target="_blank" rel="noopener">開啟工具 ↗</a><a class="btn" href="case-parola.html">下一個工具：Parola 義大利文練習 →</a></div></article>
+<div class="back-row"><a class="btn" href="index.html">← 返回作品集首頁</a><a class="btn" href="index.html#tools">其他 Tools</a></div>
+</section>
+
+</div></div>
+</main>
+<footer class="site-footer"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><span>Tools 02 · 洗標符號組合器 · 2026 · <a href="mailto:Kerijanschitz@outlook.com">Kerijanschitz@outlook.com</a> · <a href="case-washsymbol-en.html" lang="en">English</a></span><a href="#top">回到頂端 ↑</a></div></footer>
+<script src="case.js"></script></body></html>

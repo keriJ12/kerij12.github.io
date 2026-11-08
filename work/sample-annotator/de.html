@@ -1,0 +1,1093 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muster beschriften</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>img { max-width: 100%; }</style>
+<style>
+/* Layout: one-screen workbench — slim toolbar on top, photo fills the rest, a small card pops up next to whatever you just drew. */
+:root {
+  --bg: #eef0ed;
+  --surface: #ffffff;
+  --ink: #1d221f;
+  --muted: #5c6660;
+  --line: #d3d8d3;
+  --accent: #23463a;
+  --accent-ink: #ffffff;
+  --stage: #dfe3de;
+  --focus: #2f6fd6;
+  --danger: #b3261e;
+  --font-ui: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-data: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161a18; --surface: #212724; --ink: #e8ece9; --muted: #9aa59f; --line: #36403b;
+    --accent: #8fc7ae; --accent-ink: #0f1a15; --stage: #0f1311; --focus: #7aa7ff; --danger: #ff8a80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161a18; --surface: #212724; --ink: #e8ece9; --muted: #9aa59f; --line: #36403b;
+  --accent: #8fc7ae; --accent-ink: #0f1a15; --stage: #0f1311; --focus: #7aa7ff; --danger: #ff8a80;
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-ui); font-size: 14px;
+  display: flex; flex-direction: column; padding-inline: 16px; padding-block: 12px; box-sizing: border-box; gap: 10px;
+  overflow: hidden;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.bar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 8px 16px; }
+.bar-main, .bar-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.bar-actions { display: flex; gap: 8px; align-items: center; }
+.bar-actions .btn { white-space: nowrap; }
+.footer { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px 16px; }   /* export settings + buttons, under the photo */
+.bar-sub { justify-content: flex-end; }
+.bar-sub .dl + .dl { padding-left: 12px; border-left: 1px solid var(--line); }
+.brand { font-weight: 700; font-size: 15px; margin-right: 6px; letter-spacing: .02em; }
+.group { display: flex; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.tool { border: 0; background: transparent; border-radius: 7px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; }
+.tool[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.tool:disabled { opacity: .4; cursor: default; }
+.tool svg { width: 16px; height: 16px; flex: none; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 7px 14px; display: inline-flex; gap: 6px; align-items: center; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.spacer { flex: 1; }
+.dl { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.dl .cap { font-size: 12px; color: var(--muted); }
+.dl select, .dl input { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+.dl input { width: 90px; font-variant-numeric: tabular-nums; }
+.dl input.fname { width: 220px; max-width: 60vw; }
+.meta { font-family: var(--font-data); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.stage {
+  flex: 1; min-height: 0; position: relative; border-radius: 12px; background: var(--stage);
+  display: grid; place-items: center; overflow: hidden;
+}
+.stage.cropping { padding-bottom: 72px; box-sizing: border-box; }
+.stage.drag { outline: 3px dashed var(--accent); outline-offset: -8px; }
+canvas { display: block; touch-action: none; box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+.notice {
+  position: absolute; left: 12px; top: 12px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 8px; padding: 6px 10px; font-size: 13px; color: var(--muted); max-width: calc(100% - 24px);
+  pointer-events: none;
+}
+.notice b { color: var(--ink); }
+.empty { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; cursor: pointer; }
+.empty-box {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+  padding: 40px 48px; border: 2px dashed var(--muted); border-radius: 16px; color: var(--muted); max-width: 100%;
+}
+.empty:hover .empty-box, .stage.drag .empty-box { border-color: var(--accent); color: var(--ink); }
+.empty:focus-visible { outline: 2px solid var(--focus); outline-offset: -6px; }
+.empty-box p { margin: 0; }
+.empty-title { font-size: 20px; font-weight: 700; color: var(--ink); }
+.empty-sub { font-size: 14px; margin-bottom: 8px !important; }
+.empty-hint { font-size: 13px; margin-top: 10px !important; }
+
+.pop {
+  position: absolute; z-index: 5; width: 300px; max-width: calc(100% - 24px); background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 8px 28px rgba(0,0,0,.22);
+  padding: 12px; display: flex; flex-direction: column; gap: 10px;
+}
+.pop label.cap { font-size: 12px; color: var(--muted); }
+.pop input[type=text] {
+  width: 100%; box-sizing: border-box; font: 500 15px var(--font-ui); padding: 8px 10px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink);
+}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 4px 10px; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.chip:hover { border-color: var(--accent); }
+.chips.arrows { gap: 3px; flex-wrap: nowrap; }
+.arrows .chip { font-size: 14px; line-height: 1.2; padding: 2px 0; min-width: 0; flex: 1 1 0; font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "Source Sans 3", sans-serif; }
+#presets .chip { background: var(--surface); }
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.seg { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 5px 10px; font-size: 13px; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.sw { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--line); padding: 0; }
+.sw[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink); }
+.sw-custom { position: relative; display: inline-block; overflow: hidden; cursor: pointer; box-sizing: border-box;
+  background: conic-gradient(#e53935, #fdd835, #43a047, #1e88e5, #8e24aa, #e53935); }
+.sw-custom.on { box-shadow: 0 0 0 2px var(--ink); }
+.sw-custom input { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); opacity: 0; cursor: pointer; border: 0; padding: 0; }
+.bgsw { width: 28px; height: 24px; border-radius: 6px; border: 1px solid var(--line); padding: 0; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+.bgsw[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink); }
+.bgsw.none { background: repeating-conic-gradient(#c9cdc9 0 25%, #ffffff 0 50%) 0 0 / 10px 10px; color: #1d221f; }
+.alpha { display: flex; align-items: center; gap: 8px; width: 100%; }
+.alpha input[type=range] { flex: 1; min-width: 0; accent-color: var(--accent); }
+.alpha output { font-family: var(--font-data); font-size: 12px; color: var(--muted); width: 40px; text-align: right; font-variant-numeric: tabular-nums; }
+.alpha.off { opacity: .4; pointer-events: none; }
+.pop .actions { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.actions-right { display: flex; gap: 8px; }
+.same { border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 3px 10px; font-size: 12.5px; }
+.same[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.link-toggle { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; margin-left: auto; cursor: pointer; }
+.link-toggle input { accent-color: var(--accent); margin: 0; }
+.link-danger { border: 1px solid var(--danger); background: var(--surface); color: var(--danger); padding: 6px 12px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+.link-danger:hover { background: var(--danger); color: var(--surface); }
+
+.cropbar {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); z-index: 6;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; width: max-content;
+  box-shadow: 0 8px 28px rgba(0,0,0,.22); max-width: calc(100% - 24px);
+}
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: grid; place-items: center; z-index: 10; padding: 16px; }
+.overlay .card { background: var(--surface); border-radius: 12px; padding: 14px; max-width: min(900px, 100%); max-height: 100%; display: flex; flex-direction: column; gap: 10px; }
+.overlay img { max-height: 70vh; object-fit: contain; }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px; z-index: 20; }
+
+@media (max-width: 1000px) { .brand { display: none; } }
+@media (max-width: 640px) {
+  .brand { display: none; }
+  .tool span { display: none; }
+  .dl .cap { display: none; }
+  .pop { left: 8px !important; right: 8px; top: auto !important; bottom: 8px; width: auto; }
+}
+@media (prefers-reduced-motion: no-preference) { .pop { animation: in .12s ease-out; } @keyframes in { from { opacity: .4; transform: translateY(4px); } } }
+</style>
+<style>
+/* portfolio bar: first flex child of the body, pulled out to the edges with negative margins so the tool's own layout is untouched */
+.pf-bar { flex: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: -12px -16px 0; padding: 8px 16px; font-size: 12px; line-height: 1.3; background: var(--line); color: var(--muted); }
+.pf-bar a { color: var(--ink); text-decoration: none; white-space: nowrap; }
+.pf-bar a:hover, .pf-bar a:focus-visible { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="pf-bar"><span>Muster beschriften · Portfolio-Demo</span><a href="../../index-en.html">← Portfolio</a></div>
+<div class="bar">
+  <div class="bar-main">
+  <div class="brand">Muster beschriften</div>
+  <button class="btn" id="openBtn" type="button">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v3h16v-3M12 4v11M7 9l5-5 5 5"/></svg>Foto öffnen
+  </button>
+  <input type="file" id="file" accept="image/*" hidden>
+  <div class="group" role="group" aria-label="Werkzeuge">
+    <button class="tool" id="t-rect" data-tool="rect" aria-pressed="true" type="button" title="Rahmen aufziehen (B)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="16" height="12" rx="1"/></svg><span>Rahmen</span></button>
+    <button class="tool" id="t-ellipse" data-tool="ellipse" aria-pressed="false" type="button" title="Kreis aufziehen (C)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="12" rx="8" ry="6"/></svg><span>Kreis</span></button>
+    <button class="tool" id="t-none" data-tool="none" aria-pressed="false" type="button" title="Klicken für Text (T)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 6h14M12 6v13"/></svg><span>Text</span></button>
+  </div>
+  <div class="group" role="group" aria-label="Drehen">
+    <button class="tool" id="rotL" type="button" title="Links drehen (Shift+R)" aria-label="Links drehen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="10" width="11" height="11" rx="1.5"/><path d="M20 14V9a5 5 0 0 0-5-5h-5"/><path d="M13 1l-3 3 3 3"/></svg><span>90°</span></button>
+    <button class="tool" id="rotR" type="button" title="Rechts drehen (R)" aria-label="Rechts drehen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="10" y="10" width="11" height="11" rx="1.5"/><path d="M4 14V9a5 5 0 0 1 5-5h5"/><path d="M11 1l3 3-3 3"/></svg><span>90°</span></button>
+  </div>
+  <button class="btn" id="cropBtn" type="button" title="Zuschneiden (K)">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v16h16"/><path d="M2 6h16v16"/></svg>Zuschneiden
+  </button>
+  <div class="group" role="group" aria-label="Schritte">
+    <button class="tool" id="undoBtn" type="button" title="Rückgängig (Strg+Z)" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/></svg><span>Rückgängig</span></button>
+    <button class="tool" id="redoBtn" type="button" title="Wiederholen (Strg+Y)" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 000 12h3"/></svg><span>Wiederholen</span></button>
+  </div>
+  </div>
+</div>
+
+<div class="stage" id="stage">
+  <canvas id="cv" aria-label="Foto mit Markierungen"></canvas>
+  <div class="empty" id="empty" role="button" tabindex="0" aria-label="Foto öffnen">
+    <div class="empty-box">
+      <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg>
+      <p class="empty-title">Foto hierher ziehen</p>
+      <p class="empty-sub">oder mit Strg+V einfügen</p>
+      <span class="btn primary">Foto öffnen</span>
+      <p class="empty-hint">Danach auf dem Foto einen Rahmen aufziehen und den Text wählen.</p>
+    </div>
+  </div>
+  <div class="cropbar" id="cropBar" hidden>
+    <span class="meta" id="cropInfo"></span>
+    <button type="button" class="btn" id="cropReset">Original wiederherstellen</button>
+    <button type="button" class="btn" id="cropCancel">Abbrechen</button>
+    <button type="button" class="btn primary" id="cropApply">Zuschnitt übernehmen</button>
+  </div>
+  <div class="pop" id="pop" hidden>
+    <div>
+      <label class="cap" for="labelText">Text</label>
+      <input type="text" id="labelText" placeholder="z. B. 09.10.2026 – DHL" autocomplete="off">
+    </div>
+    <div class="chips" id="presets"></div>
+    <div class="chips arrows" id="arrows"></div>
+    <div class="row">
+      <div class="seg" id="shapeSeg" role="group" aria-label="Form">
+        <button type="button" data-shape="rect">Rahmen</button>
+        <button type="button" data-shape="ellipse">Kreis</button>
+        <button type="button" data-shape="none">Nur Text</button>
+      </div>
+    </div>
+    <div class="alpha" id="fsRow">
+      <label class="cap" for="fontSize">Schriftgröße</label>
+      <input type="range" id="fontSize" min="8" max="150" step="1" value="32">
+      <input type="number" id="fontSizeNum" min="8" max="150" step="1" value="32" aria-label="Schriftgröße (Zahl)" style="width:56px;font:inherit;padding:3px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)">
+    </div>
+    <div class="alpha" id="strokeRow">
+      <label class="cap" for="strokeW">Linienstärke</label>
+      <input type="range" id="strokeW" min="1" max="20" step="1" value="5">
+      <output id="strokeOut" for="strokeW">5</output>
+    </div>
+    <div class="colorblock">
+      <label class="cap">Textfarbe</label>
+      <div class="row" id="colors" role="group" aria-label="Textfarbe" style="margin-top:4px"></div>
+      <div id="frameRow" style="margin-top:8px"><label class="cap">Rahmenfarbe</label>
+        <div class="row" id="frameColors" role="group" aria-label="Rahmenfarbe" style="margin-top:4px"><button type="button" class="same" id="frameSame">wie Text</button></div>
+      </div>
+    </div>
+    <div id="bgRow">
+      <label class="cap">Hintergrund</label>
+      <div class="row" id="bgs" role="group" aria-label="Hintergrund" style="margin-top:4px"></div>
+    </div>
+    <div class="row">
+      <label class="cap">Textkontur</label>
+      <div class="seg" id="haloSeg" role="group" aria-label="Textkontur">
+        <button type="button" data-halo="off">Keine</button>
+        <button type="button" data-halo="white">Weiß</button>
+        <button type="button" data-halo="black">Schwarz</button>
+      </div>
+    </div>
+    <div class="alpha" id="alphaRow">
+      <label class="cap" for="bgAlpha">Deckkraft Hintergrund</label>
+      <input type="range" id="bgAlpha" min="0" max="100" step="5" value="100">
+      <output id="alphaOut" for="bgAlpha">100%</output>
+    </div>
+    <div class="actions">
+      <button type="button" class="link-danger" id="delBtn" title="Entf"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Löschen</button>
+      <span class="actions-right"><button type="button" class="btn" id="dupBtn" title="Strg+D"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/></svg>Duplizieren</button>
+      <button type="button" class="btn primary" id="doneBtn">Fertig</button></span>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="bar-sub">
+  <div class="dl">
+    <label class="cap" for="outSize">Download-Größe</label>
+    <select id="outSize">
+      <option value="1">Originalgröße</option>
+      <option value="0.75">75%</option>
+      <option value="0.5">50%</option>
+      <option value="0.25">25%</option>
+      <option value="L1920">max. 1920 px</option>
+      <option value="L1280">max. 1280 px</option>
+      <option value="L800">max. 800 px</option>
+      <option value="custom">Eigene Breite…</option>
+    </select>
+    <input type="number" id="customW" min="50" step="10" placeholder="Breite px" hidden>
+    <span class="meta" id="meta"></span>
+  </div>
+  <div class="dl">
+    <label class="cap" for="fileName">Dateiname</label>
+    <input type="text" id="fileName" class="fname" autocomplete="off" spellcheck="false" title="Dateiname für den Download, die Endung wird ergänzt">
+    <span class="meta" id="fileExt">.jpg</span>
+  </div>
+  <div class="dl">
+    <label class="cap" for="mailSize">Größe für E-Mail</label>
+    <select id="mailSize" title="Fotogröße beim Kopieren in eine E-Mail">
+      <option value="L800">max. 800 px</option>
+      <option value="L1280">max. 1280 px</option>
+      <option value="L1920">max. 1920 px</option>
+      <option value="1">Originalgröße</option>
+    </select>
+  </div>
+  </div>
+  <div class="bar-actions">
+  <button class="btn" id="copyBtn" type="button" title="Kopieren, dann in Outlook in eine neue E-Mail mit Strg+V einfügen">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>In E-Mail kopieren
+  </button>
+  <button class="btn primary" id="saveBtn" type="button" title="Strg+S">Herunterladen</button>
+  </div>
+</div>
+<script>
+(() => {
+  const COLORS = [
+    { id: "red", hex: "#D4051A", name: "Rot" },
+    { id: "blue", hex: "#0046A0", name: "Blau" },
+    { id: "green", hex: "#1E7B3A", name: "Grün" },
+    { id: "orange", hex: "#C85E00", name: "Orange" },
+    { id: "black", hex: "#1A1A1A", name: "Schwarz" },
+    { id: "white", hex: "#FFFFFF", name: "Weiß" },
+  ];
+  const hexOf = (id) => (id && id[0] === "#") ? id.toUpperCase() : (COLORS.find((c) => c.id === id) || COLORS[0]).hex;   // presets by id, custom colours as #RRGGBB
+  const BGS = [
+    { id: "white", fill: "#ffffff", name: "Weiß" },
+    { id: "yellow", fill: "#FFE14D", name: "Gelb" },
+    { id: "black", fill: "#111111", name: "Schwarz" },
+    { id: "color", fill: null, name: "Textfarbe (weiße Schrift)" },
+    { id: "none", fill: null, name: "Kein Hintergrund" },
+  ];
+  const SIZE = { s: 22, m: 32, l: 46 };       // label font, in 1/1000 of the photo's long edge
+  const STROKE = { s: 3, m: 5, l: 7 };
+
+  const $ = (id) => document.getElementById(id);
+  const stage = $("stage"), cv = $("cv"), ctx = cv.getContext("2d"), pop = $("pop");
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  };
+
+  let img = null, img0 = null, rot = 0, imgName = "sample", imgType = "image/jpeg";   // img0 = photo as loaded, img = turned by rot × 90°
+  let W = 0, H = 0, base = 1, scale = 1, dpr = 1;
+  let anns = [], sel = -1, tool = "rect";
+  let history = [], future = [];
+  let crop = null, cropMode = false, cropDraft = null, cropBefore = null, cropDrag = null;
+  // what the canvas shows: the whole photo while cropping, otherwise the applied crop
+  const view = () => (cropMode || !crop ? { x: 0, y: 0, w: W, h: H } : crop);
+  const outRect = () => crop || { x: 0, y: 0, w: W, h: H };
+  let prefs = Object.assign({ color: "red", size: "m", fs: 32, bg: "white", bgAlpha: 1, stroke: 5, halo: "off" }, store.get("bm-prefs", {}));
+  const newAnn = (o) => Object.assign({ text: "", color: prefs.color, size: prefs.size, fs: prefs.fs, bg: prefs.bg, bgAlpha: prefs.bgAlpha, stroke: prefs.stroke, halo: prefs.halo, frameColor: prefs.frameColor || null }, o);
+  let recent = store.get("bm-recent", []);
+
+  const fmt = (d) => `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")}.${d.getFullYear()}`;
+  const today = fmt(new Date()), yesterday = fmt(new Date(Date.now() - 864e5));
+
+  function loadImage(src, name, type, isSample) {
+    const im = new Image();
+    im.onload = () => {
+      img0 = im; img = im; rot = 0; W = im.naturalWidth; H = im.naturalHeight; base = Math.max(W, H) / 1000;
+      imgName = name; imgType = type === "image/png" ? "image/png" : "image/jpeg";
+      $("fileName").value = `${name}_markiert`; $("fileName").placeholder = `${name}_markiert`;
+      $("fileExt").textContent = imgType === "image/png" ? ".png" : ".jpg";
+      pop.hidden = true; popBefore = null;
+      crop = null; cropMode = false; cropDraft = null; $("cropBar").hidden = true;
+      anns = []; sel = -1; history = []; future = [];
+      if (isSample) {
+        anns = [
+          { shape: "none", x: W / 2, y: H * 0.17, w: 0, h: 0, text: `${today} – DHL`, color: "red", size: "m", bg: "white", bgAlpha: 1 },
+          { shape: "rect", x: W * 0.12, y: H * 0.42, w: W * 0.76, h: H * 0.3, text: `${yesterday} – GLS`, color: "blue", size: "m", bg: "white", bgAlpha: 0.6 },
+        ];
+      }
+      $("empty").hidden = true; cv.hidden = false;
+      updateOutMeta();
+      updateUndo(); fit();
+    };
+    im.src = src;
+  }
+
+  function openFile(f) {
+    if (!f || !f.type.startsWith("image/")) { toast("Bitte eine Bilddatei wählen"); return; }
+    const url = URL.createObjectURL(f);
+    loadImage(url, f.name.replace(/\.[^.]+$/, ""), f.type, false);
+  }
+
+  // ---------- layout ----------
+  function fit() {
+    if (!img) return;
+    const r = stage.getBoundingClientRect();
+    const pad = 16;
+    const v = view();
+    const extra = cropMode ? 72 : 0;   // room under the photo for the crop toolbar
+    scale = Math.min((r.width - pad * 2) / v.w, (r.height - pad * 2 - extra) / v.h);
+    dpr = window.devicePixelRatio || 1;
+    const dw = Math.max(1, Math.round(v.w * scale)), dh = Math.max(1, Math.round(v.h * scale));
+    cv.style.width = dw + "px"; cv.style.height = dh + "px";
+    cv.width = Math.round(dw * dpr); cv.height = Math.round(dh * dpr);
+    render();
+    if (!pop.hidden) placePop();
+  }
+  new ResizeObserver(fit).observe(stage);
+
+  // ---------- drawing ----------
+  function norm(a) {
+    return { x: Math.min(a.x, a.x + a.w), y: Math.min(a.y, a.y + a.h), w: Math.abs(a.w), h: Math.abs(a.h) };
+  }
+  function roundRect(g, x, y, w, h, r) {
+    g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+    g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+  }
+  function drawAnn(g, a) {
+    const col = hexOf(a.color);
+    const n = norm(a);
+    if (a.shape !== "none") {
+      g.lineWidth = (a.stroke ?? STROKE[a.size]) * base; g.strokeStyle = hexOf(a.frameColor || a.color);   // frame follows the text colour unless chosen separately
+      g.beginPath();
+      if (a.shape === "rect") g.rect(n.x, n.y, n.w, n.h);
+      else g.ellipse(n.x + n.w / 2, n.y + n.h / 2, n.w / 2, n.h / 2, 0, 0, Math.PI * 2);
+      g.stroke();
+    }
+    const cx = a.shape === "none" ? a.x : n.x + n.w / 2;
+    const cy = a.shape === "none" ? a.y : n.y + n.h / 2;
+    a._lb = null;
+    if (a.text && a.text.trim()) {
+      const fs = (a.fs ?? SIZE[a.size]) * base, pad = fs * 0.45;
+      g.font = `700 ${fs}px "Source Sans 3", "Segoe UI", "Segoe UI Symbol", "Noto Sans Symbols 2", Arial, sans-serif`;
+      g.textBaseline = "middle"; g.textAlign = "center";
+      const tw = g.measureText(a.text).width;
+      const bw = tw + pad * 2, bh = fs + pad * 1.4;
+      const bx = cx - bw / 2, by = cy - bh / 2;
+      const bg = a.bg || "white", alpha = a.bgAlpha ?? 1;
+      const fill = bg === "color" ? col : (BGS.find((b) => b.id === bg) || BGS[0]).fill;
+      const textCol = a.shape !== "none" && (bg === "color" || bg === "black") ? (bg === "color" && col === "#FFFFFF" ? "#1A1A1A" : "#ffffff") : col;
+      // Nur Text = pure text: never a box or background behind it
+      if (a.shape !== "none" && bg !== "none" && alpha > 0) {
+        roundRect(g, bx, by, bw, bh, fs * 0.28);
+        // the shape is already the frame, so the text background gets no outline of its own
+        g.globalAlpha = alpha; g.fillStyle = fill; g.fill();
+        g.globalAlpha = 1;
+      }
+      if (a.halo === "white" || a.halo === "black") {
+        g.lineJoin = "round"; g.lineWidth = fs * 0.18;
+        g.strokeStyle = a.halo === "white" ? "#ffffff" : "#111111";
+        g.strokeText(a.text, cx, cy + fs * 0.04);
+      }
+      g.fillStyle = textCol; g.fillText(a.text, cx, cy + fs * 0.04);
+      a._lb = { x: bx, y: by, w: bw, h: bh };
+    } else if (a.shape === "none") {
+      a._lb = { x: cx - 30 * base, y: cy - 15 * base, w: 60 * base, h: 30 * base };
+    }
+  }
+  function bbox(a) {
+    if (a.shape === "none") return a._lb || { x: a.x, y: a.y, w: 1, h: 1 };
+    return norm(a);
+  }
+  function render() {
+    if (!img) return;
+    const v = view();
+    ctx.setTransform(scale * dpr, 0, 0, scale * dpr, -v.x * scale * dpr, -v.y * scale * dpr);
+    ctx.clearRect(v.x, v.y, v.w, v.h);
+    ctx.drawImage(img, 0, 0, W, H);
+    anns.forEach((a) => drawAnn(ctx, a));
+    if (sel >= 0 && anns[sel]) {
+      const b = bbox(anns[sel]), m = 6 / scale;
+      ctx.setLineDash([6 / scale, 4 / scale]); ctx.lineWidth = 1.5 / scale; ctx.strokeStyle = "#2f6fd6";
+      ctx.strokeRect(b.x - m, b.y - m, b.w + m * 2, b.h + m * 2); ctx.setLineDash([]);
+      if (anns[sel].shape !== "none") {
+        const hx = b.x + b.w, hy = b.y + b.h;
+        ctx.fillStyle = "#ffffff"; ctx.strokeStyle = "#2f6fd6"; ctx.lineWidth = 2 / scale;
+        ctx.beginPath(); ctx.arc(hx, hy, 8 / scale, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      }
+    }
+    if (cropMode && cropDraft) {
+      const c = cropDraft;
+      ctx.fillStyle = "rgba(0,0,0,.55)";
+      ctx.fillRect(0, 0, W, c.y); ctx.fillRect(0, c.y + c.h, W, H - c.y - c.h);
+      ctx.fillRect(0, c.y, c.x, c.h); ctx.fillRect(c.x + c.w, c.y, W - c.x - c.w, c.h);
+      ctx.strokeStyle = "rgba(255,255,255,.5)"; ctx.lineWidth = 1 / scale; ctx.beginPath();
+      for (let i = 1; i < 3; i++) {
+        ctx.moveTo(c.x + c.w * i / 3, c.y); ctx.lineTo(c.x + c.w * i / 3, c.y + c.h);
+        ctx.moveTo(c.x, c.y + c.h * i / 3); ctx.lineTo(c.x + c.w, c.y + c.h * i / 3);
+      }
+      ctx.stroke();
+      ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2 / scale; ctx.strokeRect(c.x, c.y, c.w, c.h);
+      const L = 22 / scale; ctx.lineWidth = 5 / scale; ctx.beginPath();
+      [[c.x, c.y, 1, 1], [c.x + c.w, c.y, -1, 1], [c.x, c.y + c.h, 1, -1], [c.x + c.w, c.y + c.h, -1, -1]].forEach(([x, y, sx, sy]) => {
+        ctx.moveTo(x + sx * L, y); ctx.lineTo(x, y); ctx.lineTo(x, y + sy * L);
+      });
+      ctx.stroke();
+      // edge handles: short bars in the middle of each side
+      const M = 14 / scale; ctx.beginPath();
+      ctx.moveTo(c.x + c.w / 2 - M, c.y); ctx.lineTo(c.x + c.w / 2 + M, c.y);
+      ctx.moveTo(c.x + c.w / 2 - M, c.y + c.h); ctx.lineTo(c.x + c.w / 2 + M, c.y + c.h);
+      ctx.moveTo(c.x, c.y + c.h / 2 - M); ctx.lineTo(c.x, c.y + c.h / 2 + M);
+      ctx.moveTo(c.x + c.w, c.y + c.h / 2 - M); ctx.lineTo(c.x + c.w, c.y + c.h / 2 + M);
+      ctx.stroke();
+      $("cropInfo").textContent = `${Math.round(c.w)} × ${Math.round(c.h)} px`;
+    }
+  }
+
+  // ---------- crop ----------
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  function enterCrop() {
+    if (!img || cropMode) return;
+    settle(); cropBefore = snap(); cropMode = true;
+    cropDraft = crop ? { ...crop } : { x: 0, y: 0, w: W, h: H };
+    $("cropBar").hidden = false; $("cropBtn").setAttribute("aria-pressed", "true"); stage.classList.add("cropping"); fit();
+  }
+  function exitCrop() { cropMode = false; cropDrag = null; $("cropBar").hidden = true; stage.classList.remove("cropping"); $("cropBtn").removeAttribute("aria-pressed"); fit(); updateOutMeta(); }
+  function applyCrop() {
+    const c = cropDraft;
+    const full = c.x < 1 && c.y < 1 && c.w > W - 2 && c.h > H - 2;
+    crop = full ? null : { x: Math.round(c.x), y: Math.round(c.y), w: Math.round(c.w), h: Math.round(c.h) };
+    exitCrop(); commit(cropBefore);
+  }
+  function cropHit(p) {
+    const c = cropDraft, t = 16 / scale;
+    const corners = [[c.x, c.y, c.x + c.w, c.y + c.h, "nwse"], [c.x + c.w, c.y, c.x, c.y + c.h, "nesw"], [c.x, c.y + c.h, c.x + c.w, c.y, "nesw"], [c.x + c.w, c.y + c.h, c.x, c.y, "nwse"]];
+    const hc = corners.find(([x, y]) => Math.abs(p.x - x) < t && Math.abs(p.y - y) < t);
+    if (hc) return { mode: "size", ax: hc[2], ay: hc[3], cursor: hc[4] + "-resize" };
+    const inX = p.x > c.x && p.x < c.x + c.w, inY = p.y > c.y && p.y < c.y + c.h;
+    // edges: drag one side only
+    if (inX && Math.abs(p.y - c.y) < t) return { mode: "edge", side: "top", cursor: "ns-resize" };
+    if (inX && Math.abs(p.y - c.y - c.h) < t) return { mode: "edge", side: "bottom", cursor: "ns-resize" };
+    if (inY && Math.abs(p.x - c.x) < t) return { mode: "edge", side: "left", cursor: "ew-resize" };
+    if (inY && Math.abs(p.x - c.x - c.w) < t) return { mode: "edge", side: "right", cursor: "ew-resize" };
+    const isFull = c.x < 1 && c.y < 1 && c.w > W - 2 && c.h > H - 2;
+    if (!isFull && inX && inY) return { mode: "move", cursor: "move" };
+    return { mode: "new", cursor: "crosshair" };
+  }
+  function cropDown(p) {
+    const c = cropDraft, h = cropHit(p);
+    if (h.mode === "move") cropDrag = { mode: "move", sx: p.x, sy: p.y, ox: c.x, oy: c.y };
+    else if (h.mode === "size") cropDrag = { mode: "size", ax: h.ax, ay: h.ay };
+    else if (h.mode === "edge") cropDrag = { mode: "edge", side: h.side };
+    else cropDrag = { mode: "size", ax: clamp(p.x, 0, W), ay: clamp(p.y, 0, H) };
+  }
+  function cropMove(p) {
+    if (!cropDrag) { cv.style.cursor = cropHit(p).cursor; return; }
+    const c = cropDraft, min = 20 / scale;
+    if (cropDrag.mode === "move") {
+      c.x = clamp(cropDrag.ox + p.x - cropDrag.sx, 0, W - c.w);
+      c.y = clamp(cropDrag.oy + p.y - cropDrag.sy, 0, H - c.h);
+    } else if (cropDrag.mode === "edge") {
+      const r = c.x + c.w, b = c.y + c.h;
+      if (cropDrag.side === "top") { c.y = clamp(p.y, 0, b - min); c.h = b - c.y; }
+      if (cropDrag.side === "bottom") { c.h = clamp(p.y, c.y + min, H) - c.y; }
+      if (cropDrag.side === "left") { c.x = clamp(p.x, 0, r - min); c.w = r - c.x; }
+      if (cropDrag.side === "right") { c.w = clamp(p.x, c.x + min, W) - c.x; }
+    } else {
+      const x = clamp(p.x, 0, W), y = clamp(p.y, 0, H);
+      c.x = Math.min(x, cropDrag.ax); c.y = Math.min(y, cropDrag.ay);
+      c.w = Math.max(min, Math.abs(x - cropDrag.ax)); c.h = Math.max(min, Math.abs(y - cropDrag.ay));
+      c.w = Math.min(c.w, W - c.x); c.h = Math.min(c.h, H - c.y);
+    }
+    render();
+  }
+  $("cropBtn").addEventListener("click", () => (cropMode ? applyCrop() : enterCrop()));
+  $("cropApply").addEventListener("click", applyCrop);
+  $("cropCancel").addEventListener("click", exitCrop);
+  $("cropReset").addEventListener("click", () => { cropDraft = { x: 0, y: 0, w: W, h: H }; render(); });
+
+  // ---------- history ----------
+  const snap = () => JSON.stringify({ a: anns.map(({ _lb, ...a }) => a), c: crop, r: rot });
+  function restore(s) { const o = JSON.parse(s); if ((o.r || 0) !== rot) applyRot(o.r || 0); anns = o.a; crop = o.c; fit(); updateOutMeta(); }
+
+  // ---------- rotate the photo in 90° steps; labels and crop turn with it ----------
+  function applyRot(r) {
+    rot = ((r % 4) + 4) % 4;
+    const w0 = img0.naturalWidth, h0 = img0.naturalHeight, side = rot % 2 === 1;
+    if (rot === 0) { img = img0; W = w0; H = h0; return; }
+    const c = document.createElement("canvas"); c.width = side ? h0 : w0; c.height = side ? w0 : h0;
+    const g = c.getContext("2d");
+    g.translate(c.width / 2, c.height / 2); g.rotate(rot * Math.PI / 2); g.drawImage(img0, -w0 / 2, -h0 / 2);
+    img = c; W = c.width; H = c.height;
+  }
+  function turnRect(o, dir, w, h) {   // dir 1 = clockwise; w,h = size before turning
+    const n = { x: Math.min(o.x, o.x + o.w), y: Math.min(o.y, o.y + o.h), w: Math.abs(o.w), h: Math.abs(o.h) };
+    return dir > 0 ? { x: h - (n.y + n.h), y: n.x, w: n.h, h: n.w } : { x: n.y, y: w - (n.x + n.w), w: n.h, h: n.w };
+  }
+  function rotBy(dir) {
+    if (!img) return;
+    if (cropMode) exitCrop();
+    settle();
+    const before = snap(), w = W, h = H;
+    anns.forEach((a) => {
+      if (a.shape === "none") { const x = a.x, y = a.y; if (dir > 0) { a.x = h - y; a.y = x; } else { a.x = y; a.y = w - x; } }
+      else Object.assign(a, turnRect(a, dir, w, h));
+    });
+    if (crop) crop = turnRect(crop, dir, w, h);
+    applyRot(rot + dir);
+    pushHist(before); fit(); updateOutMeta();
+  }
+  $("rotL").addEventListener("click", () => rotBy(-1));
+  $("rotR").addEventListener("click", () => rotBy(1));
+  // every finished action (draw, move, resize, edit text/colour, delete) is one step
+  function pushHist(before) { history.push(before); if (history.length > 100) history.shift(); future = []; updateUndo(); }
+  function commit(before) { if (before !== snap()) pushHist(before); }
+  function updateUndo() { $("undoBtn").disabled = history.length === 0; $("redoBtn").disabled = future.length === 0; }
+  function settle() { hidePop(); sel = -1; }   // finish the open card first, so its edit counts as its own step
+  function undo() {
+    settle();
+    if (!history.length) { render(); return; }
+    future.push(snap()); restore(history.pop()); updateUndo();
+  }
+  function redo() {
+    settle();
+    if (!future.length) { render(); return; }
+    history.push(snap()); restore(future.pop()); updateUndo();
+  }
+
+  // ---------- pointer ----------
+  const toImg = (e) => {
+    const r = cv.getBoundingClientRect(), v = view();
+    return { x: v.x + (e.clientX - r.left) / r.width * v.w, y: v.y + (e.clientY - r.top) / r.height * v.h };
+  };
+  function hit(p) {
+    const m = 8 / scale;
+    for (let i = anns.length - 1; i >= 0; i--) {
+      const a = anns[i], b = bbox(a), lb = a._lb;
+      const inB = p.x >= b.x - m && p.x <= b.x + b.w + m && p.y >= b.y - m && p.y <= b.y + b.h + m;
+      const inL = lb && p.x >= lb.x && p.x <= lb.x + lb.w && p.y >= lb.y && p.y <= lb.y + lb.h;
+      if (inL) return i;
+      if (inB) {
+        if (a.shape === "none") return i;
+        // only the outline counts for shapes, so you can still draw inside a big frame
+        const edge = 14 / scale;
+        const nearEdge = a.shape === "rect"
+          ? (Math.abs(p.x - b.x) < edge || Math.abs(p.x - b.x - b.w) < edge || Math.abs(p.y - b.y) < edge || Math.abs(p.y - b.y - b.h) < edge)
+          : Math.abs(Math.hypot((p.x - b.x - b.w / 2) / (b.w / 2 || 1), (p.y - b.y - b.h / 2) / (b.h / 2 || 1)) - 1) < edge / Math.max(1, Math.min(b.w, b.h) / 2);
+        if (nearEdge) return i;
+      }
+    }
+    return -1;
+  }
+  function hitInside(p) {
+    let best = -1, area = Infinity;
+    anns.forEach((a, i) => {
+      if (a.shape === "none") return;
+      const b = norm(a);
+      const inside = a.shape === "rect"
+        ? p.x >= b.x && p.x <= b.x + b.w && p.y >= b.y && p.y <= b.y + b.h
+        : ((p.x - b.x - b.w / 2) / (b.w / 2 || 1)) ** 2 + ((p.y - b.y - b.h / 2) / (b.h / 2 || 1)) ** 2 <= 1;
+      if (inside && b.w * b.h < area) { best = i; area = b.w * b.h; }   // smallest wins when shapes overlap
+    });
+    return best;
+  }
+  function onHandle(p) {
+    if (sel < 0 || anns[sel].shape === "none") return false;
+    const b = bbox(anns[sel]);
+    return Math.hypot(p.x - (b.x + b.w), p.y - (b.y + b.h)) < 14 / scale;
+  }
+
+  let drag = null;
+  cv.addEventListener("pointerdown", (e) => {
+    if (!img) return;
+    cv.setPointerCapture(e.pointerId);
+    const p = toImg(e), before = snap();
+    if (cropMode) { cropDown(p); return; }
+    if (onHandle(p)) {
+      const a = anns[sel], n = norm(a); Object.assign(a, n);
+      drag = { mode: "resize", before, start: p, moved: false };
+      hidePop(); return;
+    }
+    const i = hit(p);
+    if (i >= 0) {
+      sel = i; const a = anns[i];
+      drag = { mode: "move", before, start: p, ox: a.x, oy: a.y, moved: false };
+      hidePop(); render(); return;
+    }
+    sel = -1; hidePop();
+    if (tool === "none") {
+      anns.push(newAnn({ shape: "none", x: p.x, y: p.y, w: 0, h: 0 }));
+      sel = anns.length - 1; render(); pushHist(before); drag = null;
+      e.preventDefault(); setTimeout(() => showPop(true), 0);   // open after the click finishes so the text box keeps the cursor
+      return;
+    }
+    anns.push(newAnn({ shape: tool, x: p.x, y: p.y, w: 0, h: 0 }));
+    sel = anns.length - 1;
+    drag = { mode: "create", before, start: p, moved: false };
+    render();
+  });
+  cv.addEventListener("pointermove", (e) => {
+    const p = toImg(e);
+    if (cropMode) { cropMove(p); return; }
+    if (!drag) {
+      cv.style.cursor = onHandle(p) ? "nwse-resize" : hit(p) >= 0 ? "move" : tool === "none" ? "text" : "crosshair";
+      return;
+    }
+    const a = anns[sel], dx = p.x - drag.start.x, dy = p.y - drag.start.y;
+    if (Math.hypot(dx, dy) * scale > 3) drag.moved = true;
+    if (drag.mode === "create") { a.w = dx; a.h = dy; }
+    else if (drag.mode === "move") { a.x = drag.ox + dx; a.y = drag.oy + dy; }
+    else if (drag.mode === "resize") { a.w = Math.max(10 / scale, p.x - a.x); a.h = Math.max(10 / scale, p.y - a.y); }
+    render();
+  });
+  cv.addEventListener("pointerup", () => {
+    if (cropMode) { cropDrag = null; return; }
+    if (!drag) return;
+    const d = drag; drag = null;
+    if (d.mode === "create") {
+      const a = anns[sel];
+      if (Math.abs(a.w) * scale < 8 || Math.abs(a.h) * scale < 8) {
+        // a plain click (no drag) inside a box or circle selects it instead of drawing a new one
+        anns.pop(); sel = -1;
+        const j = hitInside(d.start);
+        if (j >= 0) { sel = j; render(); showPop(false); } else render();
+        return;
+      }
+      Object.assign(a, norm(a));
+      pushHist(d.before); render(); showPop(true); return;
+    }
+    if (d.mode === "move" && !d.moved) { render(); showPop(false); return; }
+    commit(d.before); render(); showPop(false);
+  });
+
+  // ---------- popover ----------
+  let popBefore = null;
+  function showPop(isNew) {
+    if (sel < 0) return;
+    const a = anns[sel];
+    popBefore = isNew ? null : snap();
+    $("labelText").value = a.text || "";
+    syncPop(); pop.hidden = false; placePop();
+    // new shape: start typing right away; existing shape: keep focus off the text box so the Delete key removes it
+    if (isNew) { $("labelText").focus(); $("labelText").select(); } else if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  }
+  function hidePop() {
+    if (pop.hidden) return;
+    pop.hidden = true;
+    if (popBefore !== null) commit(popBefore);
+    popBefore = null;
+    const a = anns[sel];
+    if (a && a.text.trim()) { recent = [a.text.trim(), ...recent.filter((t) => t !== a.text.trim())].slice(0, 6); store.set("bm-recent", recent); }
+    if (a && a.shape === "none" && !a.text.trim()) { anns.splice(sel, 1); sel = -1; render(); }
+  }
+  function placePop() {
+    if (sel < 0 || !anns[sel]) return;
+    const b = bbox(anns[sel]);
+    const cr = cv.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+    const pw = pop.offsetWidth, ph = pop.offsetHeight;
+    const v = view(), GAP = 32;
+    const photoL = cr.left - sr.left, photoR = cr.right - sr.left;
+    let left, top;
+    if (sr.width - photoR >= pw + GAP + 12) { left = photoR + GAP; top = cr.top - sr.top; }        // beside the photo, right
+    else if (photoL >= pw + GAP + 12) { left = photoL - GAP - pw; top = cr.top - sr.top; }          // beside the photo, left
+    else {                                                                                           // no room: keep clear of the shape
+      left = photoL + (b.x + b.w - v.x) * scale + 48;
+      if (left + pw > sr.width - 12) left = photoL + (b.x - v.x) * scale - pw - 48;
+      if (left < 12) left = Math.max(12, (sr.width - pw) / 2);
+      top = cr.top - sr.top + (b.y - v.y) * scale;
+    }
+    top = Math.min(Math.max(12, top), Math.max(12, sr.height - ph - 12));
+    pop.style.left = left + "px"; pop.style.top = top + "px";
+  }
+  function buildChips() {
+    const set = [`${today} – DHL`, `${today} – GLS`, `${yesterday} – DHL`, `${yesterday} – GLS`, ...recent];
+    const uniq = [...new Set(set)].slice(0, 8);
+    $("chips").innerHTML = "";
+    uniq.forEach((t) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = t;
+      b.addEventListener("click", () => { $("labelText").value = t; setProp("text", t); $("labelText").focus(); });
+      $("chips").appendChild(b);
+    });
+  }
+  function syncPop() {
+    const a = anns[sel]; if (!a) return;
+    $("shapeSeg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.shape === a.shape)));
+    const fsv = a.fs ?? SIZE[a.size];
+    $("fontSize").value = fsv;
+    if (document.activeElement !== $("fontSizeNum")) $("fontSizeNum").value = fsv;
+    $("colors").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.color === a.color)));
+    $("frameRow").hidden = a.shape === "none";
+    $("frameSame").setAttribute("aria-pressed", String(!a.frameColor));
+    $("frameColors").querySelectorAll("button[data-fcolor]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.fcolor === a.frameColor)));
+    const isCustom = (v) => !!v && v[0] === "#";
+    $("colorsCustom").classList.toggle("on", isCustom(a.color));
+    $("colorsCustom").querySelector("input").value = hexOf(a.color).toLowerCase();
+    $("frameColorsCustom").classList.toggle("on", isCustom(a.frameColor));
+    $("frameColorsCustom").querySelector("input").value = hexOf(a.frameColor || a.color).toLowerCase();
+    const bg = a.bg || "white", col = hexOf(a.color);
+    $("bgs").querySelectorAll("button").forEach((b) => {
+      b.setAttribute("aria-pressed", String(b.dataset.bg === bg));
+      if (b.dataset.bg === "color") { b.style.background = col; b.style.color = col === "#FFFFFF" ? "#1d221f" : "#ffffff"; }
+    });
+    const pct = Math.round((a.bgAlpha ?? 1) * 100);
+    $("bgAlpha").value = pct; $("alphaOut").textContent = pct + "%";
+    $("alphaRow").classList.toggle("off", bg === "none");
+    $("bgRow").hidden = a.shape === "none";
+    $("alphaRow").hidden = a.shape === "none";
+    $("haloSeg").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.halo === (a.halo || "off"))));
+    const sw = a.stroke ?? STROKE[a.size];
+    $("strokeW").value = sw; $("strokeOut").textContent = sw;
+    $("strokeRow").hidden = a.shape === "none";
+  }
+  function setProp(k, v) {
+    const a = anns[sel]; if (!a) return;
+    if (k === "shape" && a.shape !== v) {
+      if (v === "none") { const n = norm(a); a.x = n.x + n.w / 2; a.y = n.y + n.h / 2; a.w = 0; a.h = 0; }
+      else if (a.shape === "none") { const w = 300 * base, h = 160 * base; a.x -= w / 2; a.y -= h / 2; a.w = w; a.h = h; }
+    }
+    a[k] = v;
+    if (k === "color" || k === "size" || k === "bg" || k === "bgAlpha" || k === "stroke" || k === "halo" || k === "fs" || k === "frameColor") { prefs[k] = v; store.set("bm-prefs", prefs); }
+    syncPop(); render(); placePop();
+  }
+  COLORS.forEach((c) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "sw"; b.dataset.color = c.id;
+    b.style.background = c.hex; b.title = c.name; b.setAttribute("aria-label", c.name);
+    b.addEventListener("click", () => setProp("color", c.id));
+    $("colors").appendChild(b);
+  });
+  const customSwatch = (rowId, key) => {
+    const l = document.createElement("label"); l.className = "sw sw-custom"; l.title = "Eigene Farbe"; l.id = rowId + "Custom";
+    const i = document.createElement("input"); i.type = "color"; i.setAttribute("aria-label", "Eigene Farbe");
+    i.addEventListener("input", (e) => setProp(key, e.target.value.toUpperCase()));
+    l.appendChild(i); $(rowId).appendChild(l);
+  };
+  customSwatch("colors", "color");
+  COLORS.forEach((c) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "sw"; b.dataset.fcolor = c.id;
+    b.style.background = c.hex; b.title = c.name; b.setAttribute("aria-label", c.name);
+    b.addEventListener("click", () => setProp("frameColor", c.id));
+    $("frameColors").appendChild(b);
+  });
+  customSwatch("frameColors", "frameColor");
+  $("frameSame").addEventListener("click", () => setProp("frameColor", null));
+  BGS.forEach((o) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "bgsw" + (o.id === "none" ? " none" : "");
+    b.dataset.bg = o.id; b.title = o.name; b.setAttribute("aria-label", o.name);
+    if (o.fill) b.style.background = o.fill;
+    if (o.id === "color") { b.textContent = "A"; b.style.color = "#ffffff"; }
+    if (o.id === "none") b.textContent = "∅";
+    b.addEventListener("click", () => setProp("bg", o.id));
+    $("bgs").appendChild(b);
+  });
+  $("bgAlpha").addEventListener("input", (e) => setProp("bgAlpha", Number(e.target.value) / 100));
+  $("strokeW").addEventListener("input", (e) => setProp("stroke", Number(e.target.value)));
+  $("haloSeg").addEventListener("click", (e) => { const h = e.target.closest("button")?.dataset.halo; if (h) setProp("halo", h); });
+  $("shapeSeg").addEventListener("click", (e) => { const s = e.target.closest("button")?.dataset.shape; if (s) setProp("shape", s); });
+  $("fontSize").addEventListener("input", (e) => setProp("fs", Number(e.target.value)));
+  $("fontSizeNum").addEventListener("input", (e) => {
+    const v = Number(e.target.value);
+    if (v >= 8 && v <= 150) setProp("fs", v);
+  });
+  $("labelText").addEventListener("input", (e) => setProp("text", e.target.value));
+  $("labelText").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); done(); }
+    if (e.key === "Escape") done();
+    if (e.key === "Delete" && e.target.value === "") { e.preventDefault(); $("delBtn").click(); }   // Delete on an empty text box removes the shape
+  });
+  // word presets and arrows are inserted where the cursor is, so "Artikel " can be followed by the number
+  const PRESETS = ["Artikel", "Farbe", "Variante", "Datum:"];
+  const ARROWS = ["⬅", "⬆", "⬇", "⮕", "⬈", "⬉", "⬊", "⬋", "⬌", "⬍"];
+  function insertText(t, isWord) {
+    const i = $("labelText"), v = i.value;
+    let s = i.selectionStart ?? v.length, e = i.selectionEnd ?? s;
+    if (s === 0 && e === v.length && v) s = e = v.length;          // whole text selected: add, don't replace
+    const before = v.slice(0, s), after = v.slice(e);
+    const lead = isWord && before && !/\s$/.test(before) ? " " : "";
+    const ins = lead + t + (isWord ? " " : "");
+    const nv = before + ins + after; i.value = nv;
+    const pos = before.length + ins.length; i.focus(); i.setSelectionRange(pos, pos);
+    setProp("text", nv);
+  }
+  const addPreset = (rowId, t, isWord) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = t;
+    b.addEventListener("mousedown", (e) => e.preventDefault());   // keep the cursor in the text box
+    b.addEventListener("click", () => insertText(t, isWord));
+    $(rowId).appendChild(b);
+  };
+  PRESETS.forEach((t) => addPreset("presets", t, true));
+  ARROWS.forEach((t) => addPreset("arrows", t, false));
+  function done() { hidePop(); sel = -1; render(); if (document.activeElement && pop.contains(document.activeElement)) document.activeElement.blur(); }
+  // copy the selected label with all its settings, place it just below, and open it ready for new text
+  function duplicate() {
+    if (sel < 0 || !anns[sel]) return;
+    const keep = sel; hidePop(); sel = keep;
+    const src = anns[sel]; if (!src) return;
+    const before = snap();
+    const { _lb, ...rest } = src; const c = JSON.parse(JSON.stringify(rest));
+    const b = bbox(src), step = b.h + 20 * base;
+    if (b.y + b.h + step <= H) c.y += step;
+    else if (b.y - step >= 0) c.y -= step;
+    else c.x += Math.min(b.w + 20 * base, Math.max(0, W - (b.x + b.w)));
+    anns.push(c); sel = anns.length - 1; pushHist(before); render(); showPop(true);
+  }
+  $("dupBtn").addEventListener("click", duplicate);
+
+  // Ctrl+C / Ctrl+V for labels. A marker goes on the system clipboard so pasting knows a label (not a photo) was copied last.
+  const CLIP_MARK = "\u2063label";
+  let clip = null, clipNext = null, clipWriteFailed = false;
+  function copyAnn() {
+    if (sel < 0 || !anns[sel]) return;
+    const keep = sel; hidePop(); sel = keep; render();
+    const src = anns[sel]; if (!src) return;
+    const { _lb, ...rest } = src; clip = JSON.parse(JSON.stringify(rest)); clipNext = clip;
+    clipWriteFailed = false;
+    try { navigator.clipboard.writeText(CLIP_MARK).catch(() => { clipWriteFailed = true; }); } catch { clipWriteFailed = true; }
+    toast("Markierung kopiert – mit Strg+V einfügen");
+  }
+  function pasteAnn() {
+    if (!clip || !img) return;
+    hidePop();
+    const before = snap(), c = JSON.parse(JSON.stringify(clipNext));
+    const hgt = c.shape === "none" ? (c.fs ?? 32) * base * 1.6 : Math.abs(c.h);
+    const step = hgt + 20 * base;
+    if (c.y + hgt + step <= H) c.y += step; else if (c.y - step >= 0) c.y -= step; else c.x += 30 * base;
+    anns.push(c); clipNext = c; sel = anns.length - 1; pushHist(before); render(); showPop(true);
+  }
+  $("doneBtn").addEventListener("click", done);
+  $("delBtn").addEventListener("click", () => {
+    if (sel < 0) return;
+    const before = popBefore ?? snap();
+    pop.hidden = true; popBefore = null;
+    anns.splice(sel, 1); sel = -1; commit(before); render();
+  });
+
+  // ---------- tools & keys ----------
+  function setTool(t) {
+    tool = t;
+    document.querySelectorAll(".tool[data-tool]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tool === t)));
+  }
+  document.querySelectorAll(".tool[data-tool]").forEach((b) => b.addEventListener("click", () => setTool(b.dataset.tool)));
+  $("undoBtn").addEventListener("click", undo);
+  $("redoBtn").addEventListener("click", redo);
+  document.addEventListener("keydown", (e) => {
+    const typing = e.target.matches("input, textarea, select");
+    if (cropMode && !typing) {
+      if (e.key === "Enter") { e.preventDefault(); applyCrop(); return; }
+      if (e.key === "Escape") { e.preventDefault(); exitCrop(); return; }
+    }
+    if (!typing && !e.ctrlKey && !e.metaKey && (e.key === "k" || e.key === "K")) { enterCrop(); return; }
+    if (!typing && !e.ctrlKey && !e.metaKey && (e.key === "r" || e.key === "R")) { rotBy(e.shiftKey ? -1 : 1); return; }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); save(); return; }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "d" && sel >= 0) { e.preventDefault(); duplicate(); return; }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "c" && sel >= 0) {
+      // in the text box with nothing selected, Ctrl+C copies the whole label; with text selected it copies the text as usual
+      const t = e.target, inText = t.matches("input, textarea");
+      if (!inText || (t.id === "labelText" && t.selectionStart === t.selectionEnd)) { e.preventDefault(); copyAnn(); return; }
+    }
+    const k = e.key.toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && !typing && (k === "y" || (k === "z" && e.shiftKey))) { e.preventDefault(); redo(); return; }
+    if ((e.ctrlKey || e.metaKey) && k === "z" && !typing) { e.preventDefault(); undo(); return; }
+    if (typing) return;
+    if ((e.key === "Delete" || e.key === "Backspace") && sel >= 0) { e.preventDefault(); $("delBtn").click(); }
+    if (e.key === "Escape") done();
+    if (e.key === "b" || e.key === "B") setTool("rect");
+    if (e.key === "c" || e.key === "C") setTool("ellipse");
+    if (e.key === "t" || e.key === "T") setTool("none");
+  });
+
+  // ---------- open: button, drop, paste ----------
+  $("openBtn").addEventListener("click", () => $("file").click());
+  $("file").addEventListener("change", (e) => { openFile(e.target.files[0]); e.target.value = ""; });
+  ["dragenter", "dragover"].forEach((t) => stage.addEventListener(t, (e) => { e.preventDefault(); stage.classList.add("drag"); }));
+  ["dragleave", "drop"].forEach((t) => stage.addEventListener(t, (e) => { e.preventDefault(); stage.classList.remove("drag"); }));
+  stage.addEventListener("drop", (e) => openFile(e.dataTransfer.files[0]));
+  document.addEventListener("paste", (e) => {
+    if (e.target && e.target.matches && e.target.matches("input, textarea")) return;   // normal text paste
+    const it = [...(e.clipboardData?.items || [])].find((i) => i.type.startsWith("image/"));
+    const txt = e.clipboardData?.getData("text/plain") || "";
+    if (clip && img && (txt === CLIP_MARK || !it || clipWriteFailed)) { e.preventDefault(); pasteAnn(); return; }
+    if (it) openFile(it.getAsFile());
+  });
+
+  // ---------- export size ----------
+  function outSize(forMail) {
+    const v = forMail ? $("mailSize").value : $("outSize").value, r = outRect();
+    let k = 1;
+    if (v === "custom") { const cw = Number($("customW").value); k = cw > 0 ? cw / r.w : 1; }
+    else if (v.startsWith("L")) k = Math.min(1, Number(v.slice(1)) / Math.max(r.w, r.h));
+    else k = Number(v) || 1;
+    k = Math.min(k, 4);
+    return { k, r, w: Math.max(1, Math.round(r.w * k)), h: Math.max(1, Math.round(r.h * k)) };
+  }
+  function updateOutMeta() {
+    if (!W) return;
+    const o = outSize(), same = o.w === W && o.h === H;
+    $("meta").textContent = same ? `${W} × ${H}` : `${o.w} × ${o.h} (Original ${W} × ${H})`;
+  }
+  $("outSize").value = store.get("bm-out", "1");
+  $("customW").value = store.get("bm-outw", "") || "";
+  $("customW").hidden = $("outSize").value !== "custom";
+  $("outSize").addEventListener("change", (e) => {
+    $("customW").hidden = e.target.value !== "custom";
+    if (e.target.value === "custom" && !$("customW").value) $("customW").value = W;
+    store.set("bm-out", e.target.value); updateOutMeta();
+  });
+  $("customW").addEventListener("input", (e) => { store.set("bm-outw", e.target.value); updateOutMeta(); });
+
+  // download file name: what the person typed (characters Windows refuses are dropped),
+  // or the default "<photo>_markiert" plus a size tag when the photo was resized
+  function outName(sizeTag) {
+    const def = `${imgName}_markiert`;
+    const typed = $("fileName").value.trim().replace(/[\\/:*?"<>|]/g, "").replace(/\.(jpe?g|png)$/i, "").trim();
+    return !typed || typed === def ? def + sizeTag : typed;
+  }
+  $("fileName").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); save(); } });
+  $("mailSize").value = store.get("bm-mail", "L1280");
+  $("mailSize").addEventListener("change", (e) => store.set("bm-mail", e.target.value));
+
+  // ---------- export ----------
+  // draws the finished photo (crop + chosen size + annotations) onto a fresh canvas
+  function renderOut() {
+    if (cropMode) applyCrop();
+    hidePop(); sel = -1; render();
+    const o = outSize(true);   // copy-to-mail has its own size setting
+    const c = document.createElement("canvas"); c.width = o.w; c.height = o.h;
+    const g = c.getContext("2d");
+    g.imageSmoothingEnabled = true; g.imageSmoothingQuality = "high";
+    const kx = o.w / o.r.w, ky = o.h / o.r.h;
+    g.setTransform(kx, 0, 0, ky, -o.r.x * kx, -o.r.y * ky);
+    g.drawImage(img, 0, 0, W, H);
+    anns.forEach((a) => drawAnn(g, a));
+    render();
+    return { c, o };
+  }
+
+  // copy to clipboard so it can be pasted straight into an Outlook mail
+  function copyForMail() {
+    if (!img) return;
+    const { c, o } = renderOut();
+    const png = new Promise((r) => c.toBlob(r, "image/png"));
+    try {
+      // the ClipboardItem is created inside the click, so the browser still counts it as the user's action
+      navigator.clipboard.write([new ClipboardItem({ "image/png": png })])
+        .then(() => toast(`Kopiert (${o.w} × ${o.h}). In Outlook in eine neue E-Mail mit Strg+V einfügen`))
+        .catch(() => copyFallback(png, o));
+    } catch { copyFallback(png, o); }
+  }
+  async function copyFallback(png, o) {
+    const blob = await png;
+    showResult(blob, `${outName("")}.png`, o, "Rechtsklick auf das Bild → „Bild kopieren“, dann in Outlook mit Strg+V einfügen");
+  }
+  $("copyBtn").addEventListener("click", copyForMail);
+
+  async function save() {
+    if (!img) return;
+    if (cropMode) applyCrop();
+    hidePop(); sel = -1; render();
+    try { await document.fonts.ready; } catch {}
+    const o = outSize();
+    const c = document.createElement("canvas"); c.width = o.w; c.height = o.h;
+    const g = c.getContext("2d");
+    g.imageSmoothingEnabled = true; g.imageSmoothingQuality = "high";
+    const kx = o.w / o.r.w, ky = o.h / o.r.h;   // annotations scale and crop with the photo
+    g.setTransform(kx, 0, 0, ky, -o.r.x * kx, -o.r.y * ky);
+    g.drawImage(img, 0, 0, W, H);
+    anns.forEach((a) => drawAnn(g, a));
+    render(); // restore on-screen label boxes
+    const isPng = imgType === "image/png";
+    const blob = await new Promise((r) => c.toBlob(r, isPng ? "image/png" : "image/jpeg", 0.95));
+    const sizeTag = o.w === W && o.h === H ? "" : `_${o.w}x${o.h}`;
+    const filename = `${outName(sizeTag)}.${isPng ? "png" : "jpg"}`;
+    // static site: a plain <a download> link; the preview overlay stays as a fallback for browsers without the download attribute
+    if ("download" in HTMLAnchorElement.prototype) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a"); link.href = url; link.download = filename;
+      document.body.appendChild(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      toast(`Heruntergeladen: ${filename} (${o.w} × ${o.h})`); return;
+    }
+    showResult(blob, filename, o);
+  }
+  function showResult(blob, filename, o, hint) {
+    const url = URL.createObjectURL(blob);
+    const ov = document.createElement("div"); ov.className = "overlay";
+    ov.innerHTML = `<div class="card"><div><b>${hint || "Rechtsklick oder lange drücken → „Bild speichern unter“"}</b><div class="meta">${filename} · ${o.w} × ${o.h}</div></div><img alt="Markiertes Foto"><div style="display:flex;justify-content:flex-end"><button class="btn" type="button">Schließen</button></div></div>`;
+    ov.querySelector("img").src = url;
+    ov.querySelector("button").addEventListener("click", () => { ov.remove(); URL.revokeObjectURL(url); });
+    document.body.appendChild(ov);
+  }
+  $("saveBtn").addEventListener("click", save);
+
+  let tt;
+  function toast(msg) {
+    let t = document.querySelector(".toast");
+    if (!t) { t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg; clearTimeout(tt); tt = setTimeout(() => t.remove(), 2600);
+  }
+
+  // ---------- start ----------
+  cv.hidden = true;
+  $("fileName").placeholder = "Dateiname";
+  $("empty").addEventListener("click", () => $("file").click());
+  $("empty").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("file").click(); } });
+  document.fonts?.ready.then(render);
+})();
+</script>
+</body>
+</html>

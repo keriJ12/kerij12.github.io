@@ -1,0 +1,63 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Length 1550 >>
+stream
+BT
+/F1 10 Tf
+1 0 0 1 60 800 Tm (Demo Textil GmbH - Bestellung) Tj
+1 0 0 1 60 786 Tm (Bestellung: 260042) Tj
+1 0 0 1 60 772 Tm (Auftrag: 7731) Tj
+1 0 0 1 60 758 Tm (Lieferdatum: 2027-02-15) Tj
+1 0 0 1 60 730 Tm (Pos  Nr.      Farbname      Menge        Preis) Tj
+1 0 0 1 60 716 Tm (1 M260001 Schwarz 600,00 m 4.800,00 EUR) Tj
+1 0 0 1 60 698 Tm (Artikel-Nr.: DM4101, Leinen 160 g) Tj
+1 0 0 1 60 684 Tm (Farbe: 1011 RE) Tj
+1 0 0 1 60 664 Tm (2 M260002 Natur 450,00 m 3.600,00 EUR) Tj
+1 0 0 1 60 646 Tm (Artikel-Nr.: DM4101, Leinen 160 g) Tj
+1 0 0 1 60 632 Tm (Farbe: 1395) Tj
+1 0 0 1 60 612 Tm (3 M260003 Indigo 500,00 m 4.250,00 EUR) Tj
+1 0 0 1 60 594 Tm (Artikel-Nr.: DM4102 LINKE SEITE, Leinen 150 g) Tj
+1 0 0 1 60 580 Tm (Farbe: 1395 LI) Tj
+1 0 0 1 60 560 Tm (ACHTUNG: original Fadenlauf beachten) Tj
+1 0 0 1 60 546 Tm (4 M260004 Weiss 300,00 m 2.100,00 EUR) Tj
+1 0 0 1 60 528 Tm (Artikel-Nr.: DM4205, Halbleinen 240 g) Tj
+1 0 0 1 60 514 Tm (Farbe: 78) Tj
+1 0 0 1 60 494 Tm (5 M260005 Sand 400,00 m 2.960,00 EUR) Tj
+1 0 0 1 60 476 Tm (Artikel-Nr.: DM4310, Baumwolle 120 g) Tj
+1 0 0 1 60 462 Tm (Farbe: 201) Tj
+1 0 0 1 60 442 Tm (6 M260006 Muster 0,50 m 4,50 EUR) Tj
+1 0 0 1 60 424 Tm (Artikel-Nr.: DM4101, Leinen 160 g) Tj
+1 0 0 1 60 410 Tm (Farbe: 2630) Tj
+1 0 0 1 60 390 Tm (7 M260007 Rot 250,00 m 2.125,00 EUR) Tj
+1 0 0 1 60 372 Tm (Artikel-Nr.: DM4102, Leinen 150 g) Tj
+1 0 0 1 60 358 Tm (Farbe: 2630) Tj
+1 0 0 1 60 324 Tm (Gesamtmenge: 2.500,50 m) Tj
+1 0 0 1 60 296 Tm (Fiktive Bestellung fuer die Portfolio-Demo des Garnbedarf-Rechners.) Tj
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000338 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1940
+%%EOF

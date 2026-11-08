@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="織序：一封 Email，如何走到一卷合格的布。紡織業跨部門工作流程設計案例，七章敘事，含可操作 Demo。"><title>織序｜Case Study — Keri Janschitz 作品集</title><link rel="stylesheet" href="site.css"><link rel="stylesheet" href="theme-midnight.css"></head>
+<body class="cs-page">
+<a class="skip" href="#main">跳到主要內容</a>
+<header class="site-header"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><nav class="site-nav" aria-label="網站導覽"><a href="index.html#case-studies" aria-current="page">Case Studies</a><a href="index.html#tools">Tools</a><a href="index.html#playground">Playground</a><a href="index.html#about">About</a><a class="lang-switch" href="case-weave-en.html" lang="en" hreflang="en" title="English version（舊版排版）">EN</a><a class="btn small primary" href="demo/index.html" target="_blank" rel="noopener">體驗 Demo ↗</a></nav></div></header>
+<main id="main">
+<section class="cs-hero" id="top"><div class="wrap"><nav class="crumbs" aria-label="路徑"><a href="index.html">作品集首頁</a><span>/</span><a href="index.html#case-studies">Case Studies</a><span>/</span><span>紡織業 · 跨部門工作流程</span></nav><h1>織序｜一封 Email，如何走到一卷合格的布</h1><p class="cs-intro">為一家紡織公司的客服、研發、採購、生產、品管、染整與打包，設計一個把需求、原料與品質紀錄接在一起的交接工作台。純前端可操作原型，從問題觀察到 269 項流程測試。</p><div class="actions"><a class="btn primary" href="demo/index.html" target="_blank" rel="noopener">體驗 Demo ↗</a><a class="btn" href="demo/index.html?page=map" target="_blank" rel="noopener">看流程心智圖 ↗</a></div></div><div class="wrap"><ul class="cs-meta"><li>流程設計 · 人機協作</li><li>個人作品 · 概念原型</li><li>2026 · 持續迭代</li><li>瀏覽器 · 純 HTML/CSS/JS</li></ul></div><div class="wrap cs-hero-shots"><figure><img src="assets/demo-overview.png" alt="Demo 首頁：案件總覽與示範導覽四個按鈕"><figcaption>首頁 · 案件總覽與示範導覽</figcaption></figure><figure><img src="assets/demo-tour-rework.png" alt="Demo 成品品管頁：原瑕疵逐項複查與染整廠備註"><figcaption>成品複驗 · 原瑕疵逐項複查</figcaption></figure><figure><img src="assets/demo-map.png" alt="Demo 流程心智圖頁：24 個節點標示 AI 角色"><figcaption>流程心智圖 · AI 放哪／不放哪</figcaption></figure></div></section>
+
+<div class="wrap cs-layout">
+<aside class="cs-toc" aria-label="章節目錄"><ol><li><a href="#c1"><span>01</span>背景</a></li><li><a href="#c2"><span>02</span>觀察</a></li><li><a href="#c3"><span>03</span>問題與範圍</a></li><li><a href="#c4"><span>04</span>設計</a></li><li><a href="#c5"><span>05</span>驗證與修正</a></li><li><a href="#c6"><span>06</span>AI 邊界</a></li><li><a href="#c7"><span>07</span>結果與限制</a></li></ol><a class="cs-toc-back" href="index.html#case-studies">← 返回 Case Studies</a></aside>
+
+<div class="cs-body">
+
+<section class="cs-chapter" id="c1"><h2 class="cs-chapter-title"><span>01</span>背景</h2>
+<article class="cs-card"><span class="cs-label">現場</span><h3>一家約三十人的紡織公司，訂單在七個部門之間接力</h3><p>客戶的需求從一封 Email 進來：有時是「我想找這樣的布」，有時是「我要再訂這個型號」。接著經過客服整理、研發評估、採購補料、織造、胚布品管、外送染整、成品複驗、打包出貨，最後人工確認客戶收到。每一站都有人負責，但沒有一個地方看得到整條線。</p><p>我在這個環境裡的觀察是：布料本身會往前走，資訊卻常常留在上一站。</p></article>
+<article class="cs-card"><span class="cs-label">起點</span><h3>不是做 ERP，而是做交接</h3><p>公司不缺系統，缺的是「下一位接手的人知道該知道的事」。所以這個作品刻意不碰庫存扣減、財務、權限；只處理需求、進度、等待原因與品質紀錄怎麼跟著訂單走。這個邊界在第 03 章會寫成明確的做與不做。</p></article>
+</section>
+
+<section class="cs-chapter" id="c2"><h2 class="cs-chapter-title"><span>02</span>觀察</h2>
+<article class="cs-card"><span class="cs-label">三個反覆出現的對話</span><h3>每一句追問，背後都是一次資訊沒有跟上</h3><div class="cs-quotes"><blockquote><p>「那批布寄出了嗎？」</p><footer>客服 ↔ 生產：外送狀態不透明，客服只能逐段追問。</footer></blockquote><blockquote><p>「這批原料是給誰的？」</p><footer>採購 ↔ 排程：原料到了，卻沒連回正在等待的訂單。</footer></blockquote><blockquote><p>「原本的瑕疵還在嗎？」</p><footer>胚布 ↔ 成品品管：紙本備註被漏看，問題跟著布寄給客戶。</footer></blockquote></div></article>
+<article class="cs-card cs-card-wide"><span class="cs-label">跟一筆訂單</span><h3>同一筆訂單，不同的人需要知道什麼</h3><p class="cs-sub">選一個節點，看下一位接手者需要的資訊。資料取自 Demo 示範訂單。</p><div class="journey-layout cs-journey"><div class="journey-tabs" role="tablist" aria-label="訂單交接節點"><button role="tab" id="tab-0" aria-controls="scene" aria-selected="true" data-scene="0"><span>01</span><div><b>收到需求</b><small>客服 / EMAIL INTAKE</small></div><i>↗</i></button><button role="tab" id="tab-1" aria-controls="scene" aria-selected="false" tabindex="-1" data-scene="1"><span>02</span><div><b>等待原料</b><small>採購 / MATERIAL ARRIVAL</small></div><i>↗</i></button><button role="tab" id="tab-2" aria-controls="scene" aria-selected="false" tabindex="-1" data-scene="2"><span>03</span><div><b>回廠複驗</b><small>品管 / QUALITY CONTROL</small></div><i>↗</i></button><button role="tab" id="tab-3" aria-controls="scene" aria-selected="false" tabindex="-1" data-scene="3"><span>04</span><div><b>準備交付</b><small>打包 / DELIVERY</small></div><i>↗</i></button></div><div class="scene" id="scene" role="tabpanel" aria-labelledby="tab-0" tabindex="0"></div></div><p class="cs-principle"><span>DESIGN PRINCIPLE</span>把需要的資訊，放在需要做決定的地方。</p></article>
+</section>
+
+<section class="cs-chapter" id="c3"><h2 class="cs-chapter-title"><span>03</span>問題與範圍</h2>
+<article class="cs-card"><span class="cs-label">問題陳述</span><h3>交接時缺的不是判斷力，而是上一站的紀錄沒有到場</h3><p>客服不知道布在哪、採購不知道料給誰、品管不知道原本的瑕疵在哪。三個問題的共同點是：做決定的人手上沒有做決定所需的資訊。所以設計目標不是幫人做決定，而是確保每一次交接，接手的人看得到前面發生過什麼、現在在等什麼、下一步是什麼。</p></article>
+<article class="cs-card"><span class="cs-label">範圍</span><h3>第一版做什麼、不做什麼</h3><div class="cs-moscow"><div><h4>做</h4><ul><li>A 需求研發、B 既有型號訂單兩條入口</li><li>共用後段：採購分批到料、排程、胚布品管、染整返工、成品複驗、出貨、人工登記收貨</li><li>每次推進留原因與追蹤日，等待原因可見</li><li>瑕疵隨布卷與訂單延續到複驗</li><li>取消保留歷史、只刪誤建草稿</li></ul></div><div><h4>刻意不做</h4><ul><li>後端、登入、真正的角色權限</li><li>庫存扣減、拆單、退貨流程</li><li>真實 AI 模型、Email 與供應商串接</li><li>技術書 PDF 產生器</li><li>任何效益數字或導入承諾</li></ul></div></div><p class="cs-note">不做的項目在 Demo 的說明文件與畫面裡都寫明，避免讓觀看者以為這是可上線的系統。</p></article>
+</section>
+
+<section class="cs-chapter" id="c4"><h2 class="cs-chapter-title"><span>04</span>設計</h2>
+<article class="cs-card"><span class="cs-label">兩個入口，一段共用後段</span><h3>需求從哪裡進來不同，但採購到交付是同一條流程</h3><div class="cs-two"><div><h4>A / REQUEST · 需求研發</h4><p>Email 整理 → 既有布料查找 → 人工核對送交研發 → 完整性、可行性、材料、打樣、評估、技術書 → 三部門接手。查到合適既有型號可直接轉成 B 訂單並鎖定需求；技術書完成可建立生產訂單接到共用後段。</p></div><div><h4>B / ORDER · 既有型號訂單</h4><p>人工確認型號、顏色、數量 → 成品足量直接揀貨；不足查胚布；再不足確認經線與排程。補色卡獨立追蹤，不擋已確認訂單；追加顏色另建關聯訂單。</p></div></div></article>
+<article class="cs-card cs-card-shot"><div><span class="cs-label">決策 · 三層庫存</span><h3>成品、胚布、經線分開看，數字直接決定分流</h3><p>B 訂單確認後，右側固定顯示成品布、可用胚布、可用經線三個數字，由人工登記。足量與否是業務規則，直接算出來分流，不讓任何模型猜。揀貨、打包、出貨頁都看得到同一張卡。</p></div><figure><img src="assets/demo-tour-stock.png" alt="Demo 揀貨頁：右側三層庫存卡顯示成品 800 m"><figcaption>成品足 → 揀貨；右側三層庫存卡</figcaption></figure></article>
+<article class="cs-card cs-card-shot"><div><span class="cs-label">決策 · 採購到料</span><h3>採購單綁訂單，到料可以分批</h3><p>每筆採購對應一張訂單與客戶。到料分批登記 kg、批號、人工核實，重複批次與超過未到量會被擋下。累計足量才提示生產恢復排程，客服同步看到到料通知，不必口頭追問「這批是給誰的」。</p></div><figure><img src="assets/demo-tour-purchase.png" alt="Demo 等待經線到料頁：已到 40 / 100 kg，可登記本次到貨"><figcaption>缺料 → 分批到料 40 / 100 kg</figcaption></figure></article>
+<article class="cs-card cs-card-shot"><div><span class="cs-label">決策 · 瑕疵追蹤</span><h3>瑕疵跟著布卷與訂單走，不被洗掉</h3><p>胚布品管登記的瑕疵連回卷號，送染整的交貨單帶上，回廠後成品複驗頁把原瑕疵、染整廠備註、客戶品質要求放在同一個畫面，必須逐項勾選才能放行。不通過退回同一技術書指定的廠商改善，所有外送與品管紀錄保留。</p></div><figure><img src="assets/demo-tour-greige.png" alt="Demo 送染整頁：交貨單帶上胚布品管登記的瑕疵"><figcaption>胚布足 → 帶瑕疵送染整</figcaption></figure></article>
+<article class="cs-card cs-card-shot"><div><span class="cs-label">決策 · 等待不等於疏失</span><h3>每次推進留原因與追蹤日，停留時間用來找卡點</h3><p>停留時間包含待料、排隊與外部加工，在機台與追蹤頁用來看哪裡卡住，不用來直接歸責某人。到期追蹤是規則式彙整，畫面上明示不是 AI 預測。</p></div><figure><img src="assets/demo-machines.png" alt="Demo 機台與追蹤頁：各機台訂單卡與到期追蹤"><figcaption>機台與追蹤 · 規則式彙整</figcaption></figure></article>
+<article class="cs-card"><span class="cs-label">決策 · 取消與刪除</span><h3>取消保留全部歷史，只有誤建草稿能刪</h3><p>已採購、生產或外送的案件取消時，系統列出對應的善後事項逐項處理，但不會假裝自動撤回採購或取回外送的布。只有未送交、無關聯的草稿可以移入回收筒並還原，沒有永久刪除。</p></article>
+</section>
+
+<section class="cs-chapter" id="c5"><h2 class="cs-chapter-title"><span>05</span>驗證與修正</h2>
+<article class="cs-card"><span class="cs-label">審閱後修正</span><h3>兩個靠操作才發現的錯誤</h3><ul class="cs-list"><li><b>複驗通過後不該再回退。</b>原本成品複驗通過後的揀貨頁仍有「揀貨發現缺貨，轉生產評估」按鈕，會把已通過複驗的訂單退回胚布庫存確認，且按鈕文字與實際跳轉不符。修正為只有原本走成品庫存的訂單才有該按鈕，並改名「轉胚布庫存確認」。</li><li><b>經線狀態不該手選。</b>排程頁原本要人自己選「有可用經線／缺料待補」，但所需與可用 kg 就在旁邊。改為自動判定，錯誤訊息直接說缺多少 kg。</li></ul></article>
+<article class="cs-card"><span class="cs-label">自動測試</span><h3>13 個測試檔、269 項流程檢查</h3><p>不依賴瀏覽器，用 Node 直接執行真實的事件處理函式：分批到料的防重與超量、複驗漏勾一項不得放行、取消後的善後清單、A→B 轉單後原需求鎖定、重新載入後資料仍在。每次改動都重跑；測試輸出隨 Demo 附上。</p><p class="cs-note">這些不等於真實使用者測試。目前只在桌面瀏覽器 1280 與 900 寬實測，手機寬度未完整驗證。</p></article>
+<article class="cs-card"><span class="cs-label">示範導覽</span><h3>讓第一次看的人三分鐘看到重點</h3><p>首頁四個按鈕把示範訂單直接放到揀貨、帶瑕疵送染整、分批到料 40/100 kg、回廠複驗四個節點，不用自己輸入數字走完全程。這是審閱後補的：觀看者的時間比完整流程重要。</p><div class="actions"><a class="btn" href="demo/index.html" target="_blank" rel="noopener">開啟 Demo 首頁 ↗</a></div></article>
+</section>
+
+<section class="cs-chapter" id="c6"><h2 class="cs-chapter-title"><span>06</span>AI 邊界</h2>
+<article class="cs-card"><span class="cs-label">原則</span><h3>讓 AI 整理，讓人做決定</h3><p>AI 不做決定，但幾乎每個交接點的輸入與輸出，都有它可以站的位置。我把「已做」和「保留位」分開標，不把模擬說成實作。</p><div class="ai-table cs-ai"><div class="done"><span>已做 · 模擬 AI</span><h4>讀懂雜亂的輸入</h4><p>Email 轉欄位草稿，逐欄附原文依據；既有布料候選標示不符原因。客服核對後才建案。</p><b>2 個節點 · 本機規則模擬，未串接模型</b></div><div class="reserved"><span>保留位 · AI 輔助</span><h4>抽取、辨識、草稿、摘要</h4><p>供應商送貨單抽 kg 與到料日、手寫瑕疵單辨識、技術書初稿、各部門交接摘要、催辦與出貨通知、卡關原因摘要。</p><b>14 個節點 · 已設計位置，尚未實作</b></div><div class="off"><span>不放 AI</span><h4>規則算得出，或人要簽字</h4><p>三層庫存分流、採購綁單防重、色卡追蹤交給規則；型號確認、材料核實、複驗放行、收貨結案由人簽字。</p><b>8 個節點 · 不讓模型猜數量或放行品質</b></div></div></article>
+<article class="cs-card cs-card-shot"><div><span class="cs-label">流程心智圖</span><h3>24 個節點，每一個標出 AI 的角色</h3><p>五條分支、24 個節點，琥珀色是 Demo 已模擬的 AI，虛線外框是保留位，綠色是人工簽核。可依分類篩選，點節點跳到對應畫面。另有一頁對照表寫每個環節為什麼這樣放、未來整合才可能做到什麼。</p><div class="actions"><a class="btn primary" href="demo/index.html?page=map" target="_blank" rel="noopener">開啟流程心智圖 ↗</a><a class="btn" href="demo/index.html?page=ai" target="_blank" rel="noopener">AI 放哪／不放哪對照表 ↗</a></div></div><figure><img src="assets/demo-map.png" alt="Demo 流程心智圖：中心織序流程全貌，五條分支 24 個節點"><figcaption>流程心智圖頁</figcaption></figure></article>
+</section>
+
+<section class="cs-chapter" id="c7"><h2 class="cs-chapter-title"><span>07</span>結果與限制</h2>
+<article class="cs-card"><span class="cs-label">現況</span><h3>一個能親手走完的概念原型，不是導入成果</h3><p>這個作品呈現我如何把現場觀察轉成分支、例外與確認條件，再用操作回饋修正流程。它目前是本機概念原型：沒有企業導入、沒有效益數字、沒有真實 AI、庫存扣減、多人同步或物流串接；角色切換只是視角，不是權限。</p><p>下一步是讓沒看過的人實際操作，看流程是否清楚，而不是繼續加功能。</p></article>
+<article class="cs-card cs-card-wide cs-live"><span class="cs-label">實際程式</span><h3>直接在這裡看 Demo</h3><div class="browser-frame"><div class="browser-bar"><div><i></i><i></i><i></i></div><span>WEAVE / LIVE LOCAL DEMO</span><b>實際程式預覽</b></div><div class="frame-viewport"><iframe src="demo/index.html" title="織序實際 Demo 預覽，操作請使用開啟完整 Demo 按鈕" loading="lazy" tabindex="-1"></iframe><a class="frame-cover" href="demo/index.html" target="_blank" rel="noopener" aria-label="在新分頁開啟織序 Demo"><span>進入工作台 ↗</span></a></div></div><p class="frame-note">上方載入實際本機 Demo，會顯示你在這台瀏覽器保存過的案件；點擊後在新分頁操作。資料只存在瀏覽器本機，沒有後端。</p></article>
+<a class="final-cta" href="demo/index.html" target="_blank" rel="noopener"><div><small>TAKE A CLOSER LOOK</small><span>走進織序。</span><p>從首頁示範導覽，體驗「分批到料」與「原瑕疵複查」。</p></div><b>↗</b></a>
+<div class="back-row"><a class="btn" href="index.html">← 返回作品集首頁</a><a class="btn" href="index.html#case-studies">其他 Case Studies</a></div>
+</section>
+
+</div></div>
+</main>
+<footer class="site-footer"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><span>Case Study 01 · 織序 · 2026 · <a href="mailto:Kerijanschitz@outlook.com">Kerijanschitz@outlook.com</a> · <a href="case-weave-en.html" lang="en">English</a></span><a href="#top">回到頂端 ↑</a></div></footer>
+<script src="case-weave.js"></script></body></html>

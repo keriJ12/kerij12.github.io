@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="布樣標註工具：讓樣品部門把到貨照片框起來、標上日期與物流商，一鍵複製進郵件。一個不寫程式的人用三十句需求做出來的內部工具。"><title>布樣標註工具｜Tools — Keri Janschitz 作品集</title><link rel="stylesheet" href="site.css"><link rel="stylesheet" href="theme-midnight.css"></head>
+<body class="cs-page">
+<a class="skip" href="#main">跳到主要內容</a>
+<header class="site-header"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><nav class="site-nav" aria-label="網站導覽"><a href="index.html#case-studies">Case Studies</a><a href="index.html#tools" aria-current="page">Tools</a><a href="index.html#playground">Playground</a><a href="index.html#about">About</a><a class="lang-switch" href="case-annotator-en.html" lang="en" hreflang="en" title="English version">EN</a><a class="btn small primary" href="work/sample-annotator/index.html" target="_blank" rel="noopener">開啟工具 ↗</a></nav></div></header>
+<main id="main">
+<section class="cs-hero" id="top"><div class="wrap"><nav class="crumbs" aria-label="路徑"><a href="index.html">作品集首頁</a><span>/</span><a href="index.html#tools">Tools</a><span>/</span><span>紡織業 · 樣品部門工具</span></nav><h1>布樣標註工具｜把到貨照片框起來、標上日期與物流商，一鍵進郵件</h1><p class="cs-intro">為一家奧地利紡織公司的樣品與業務同事做的單檔網頁工具：拖進照片、畫框、選預設文字、複製到 Outlook。沒有伺服器、沒有安裝，照片從頭到尾只在使用者的瀏覽器裡。這是我第一個「不寫程式、用需求把 AI 帶到能用」的工具，兩天內提了約三十個需求。</p><div class="actions"><a class="btn primary" href="work/sample-annotator/index.html" target="_blank" rel="noopener">開啟工具（中文）↗</a><a class="btn" href="work/sample-annotator/de.html" target="_blank" rel="noopener">德文版 ↗</a></div></div><div class="wrap"><ul class="cs-meta"><li>內部工具 · 實際使用情境</li><li>需求定義 · AI 輔助實作</li><li>2026 · 中德雙語</li><li>單一 HTML · 無後端</li></ul></div><div class="wrap cs-hero-shots cs-hero-one"><figure><img src="assets/work-annotator.png" alt="布樣標註工具：範例照片上有紅色日期標籤與藍色方框標註，上方是方框／圈圈／文字／旋轉／裁切工具列"><figcaption>開啟即有範例照片可操作；上方工具列，下方輸出尺寸與「複製到郵件」</figcaption></figure></div></section>
+
+<div class="wrap cs-layout">
+<aside class="cs-toc" aria-label="章節目錄"><ol><li><a href="#c1"><span>01</span>背景</a></li><li><a href="#c2"><span>02</span>問題</a></li><li><a href="#c3"><span>03</span>設計決策</a></li><li><a href="#c4"><span>04</span>做法與技術</a></li><li><a href="#c5"><span>05</span>限制與學到的事</a></li></ol><a class="cs-toc-back" href="index.html#tools">← 返回 Tools</a></aside>
+<div class="cs-body">
+
+<section class="cs-chapter" id="c1"><h2 class="cs-chapter-title"><span>01</span>背景</h2>
+<article class="cs-card"><span class="cs-label">現場</span><h3>每天都有布樣到貨，每一張照片都要標同樣的三件事</h3><p>樣品部門收到包裹，拍照，然後要讓客戶或供應商知道：哪一天到、哪家物流送的、這是哪個品項哪個顏色。原本的做法是把照片丟進繪圖軟體或 Word，手動加字、調大小、再存檔寄出。動作不難，但每天重複，而且每個人標出來的樣子都不一樣。</p></article>
+<article class="cs-card"><span class="cs-label">起點</span><h3>我不會寫程式，但我很清楚這件事該長什麼樣</h3><p>我沒有打開編輯器，而是把「拖照片進來、畫框、按一下日期、複製到郵件」這個流程寫成需求，交給 AI 實作，再用實際照片去試、回報哪裡不對。兩天內大約提了三十個需求，從「框要能拖著走」到「貼進 Outlook 不要太大」。這個過程本身後來變成一篇給不寫程式的上班族看的教學。</p></article>
+</section>
+
+<section class="cs-chapter" id="c2"><h2 class="cs-chapter-title"><span>02</span>問題</h2>
+<article class="cs-card"><span class="cs-label">問題陳述</span><h3>工具要省的不是畫框的時間，而是「每次都要重新決定」的時間</h3><p>字多大、什麼顏色、日期格式、檔案多大才寄得出去，這些每次都要想一次。所以設計目標不是做一個功能齊全的影像編輯器，而是把樣品部門會做的那幾個決定變成預設值，讓人只需要做「框哪裡、寫什麼」這兩件事。</p></article>
+<article class="cs-card"><span class="cs-label">範圍</span><h3>做什麼、刻意不做什麼</h3><div class="cs-moscow"><div><h4>做</h4><ul><li>開啟照片：按鈕、拖放、Ctrl+V 貼上</li><li>方框、圈圈、純文字三種標註，拖曳即畫</li><li>預設文字晶片：品項、顏色、版本、日期；日期自動帶當天</li><li>旋轉、非破壞性裁切、上一步下一步</li><li>下載（可選尺寸）與「複製到郵件」（獨立尺寸）</li><li>偏好記在瀏覽器；深色模式跟隨系統</li></ul></div><div><h4>刻意不做</h4><ul><li>上傳到任何伺服器、帳號、分享連結</li><li>多選、群組、標籤旋轉、多行文字</li><li>把標註存成專案檔重新開啟</li><li>濾鏡、修圖</li></ul></div></div></article>
+</section>
+
+<section class="cs-chapter" id="c3"><h2 class="cs-chapter-title"><span>03</span>設計決策</h2>
+<article class="cs-card"><span class="cs-label">決策 · 首屏</span><h3>打開就有一張範例照片，不用先找檔案</h3><p>第一次用的人最容易卡在「我要先去哪裡找一張照片」。中文版開啟時直接顯示一張程式畫出來的範例照片和兩個範例標籤，拖一下就懂操作；因為是程式畫的，檔案裡沒有任何真實布樣。德文版給同事用，刻意保留空白拖放區。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 預設文字</span><h3>日期與物流商是預設標籤，而且是「插入」不是「取代」</h3><p>收樣當天要記的就是「幾號、哪家送到」，所以範例標籤和輸入提示都用「日期 – 物流商」格式，日期由程式算當天。預設晶片按下去是在游標位置插入文字，不是覆蓋，因為實際標籤常是「品項 123 顏色 05」這種組合。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 輸出</span><h3>「複製到郵件」是獨立按鈕，有自己的尺寸</h3><p>寄信的照片不需要原尺寸，長邊 1280 已經夠看，又不會把信件撐大；下載則保留原尺寸給存檔。兩個按鈕、兩組尺寸記憶，使用者不用每次在兩種用途之間切換設定。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 可以後悔</span><h3>裁切是非破壞性的，每個完成的動作就是一步</h3><p>裁切只記錄一個範圍，原圖與標註座標都不動，所以可以還原、可以 undo、旋轉後裁切範圍會跟著轉。畫完一個框、拖完、改完文字關掉卡片，各算一步；編輯卡片開著時改顏色不會每改一次就塞一步歷史，避免 undo 要按很多下。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 不打架</span><h3>形狀只有邊線會被選到，字體大小跟著照片走</h3><p>在一個大框裡面點，是畫新的框，不是選到舊框；真的要選大框就點它的邊。字體大小以照片長邊的千分比計算，同一個設定在 1500 px 和 4000 px 的照片上看起來比例一樣，輸出縮小時標籤也等比縮。</p></article>
+</section>
+
+<section class="cs-chapter" id="c4"><h2 class="cs-chapter-title"><span>04</span>做法與技術</h2>
+<article class="cs-card"><span class="cs-label">怎麼做出來的</span><h3>需求一句一句提，用真的照片驗收</h3><ul class="cs-list"><li><b>先定流程再談功能。</b>第一個需求是整段使用流程，不是「我要一個畫框工具」。</li><li><b>每一輪只改一件事，馬上用真實照片試。</b>框拖不動、字太小、貼進 Outlook 爆掉，都是試出來才提的。</li><li><b>把「為什麼」說清楚。</b>例如「寄信的照片不用原尺寸」這句話，才會長出獨立的郵件尺寸設定。</li><li><b>德文版不是翻譯，是同一套程式換文字與字型。</b>邏輯完全相同，才不會兩邊行為漸漸分家。</li></ul></article>
+<article class="cs-card"><span class="cs-label">技術重點</span><h3>一個 canvas、幾個瀏覽器 API，沒有框架</h3><ul class="cs-list"><li><b>Canvas 2D</b>：照片、框、圈、文字底色、描邊、選取虛線、裁切遮罩都畫在同一張畫布；輸出時另開離屏畫布一次處理裁切與縮放。</li><li><b>Clipboard API</b>：成品以 PNG 寫進系統剪貼簿；不支援的瀏覽器退回預覽視窗讓使用者右鍵複製。</li><li><b>Pointer Events</b>：滑鼠與觸控同一套邏輯。</li><li><b>localStorage</b>：記顏色、字級、底色、輸出與郵件尺寸；都包在 try/catch，無痕模式也能用。</li><li><b>單一 HTML 約 60 KB</b>，唯一外部資源是 Google Fonts。</li></ul></article>
+</section>
+
+<section class="cs-chapter" id="c5"><h2 class="cs-chapter-title"><span>05</span>限制與學到的事</h2>
+<article class="cs-card"><span class="cs-label">限制</span><h3>它是一個順手的小工具，不是影像編輯器</h3><p>「複製到郵件」依賴瀏覽器支援把圖片寫進剪貼簿，部分手機瀏覽器會退到手動複製。標註不能存成專案檔，關掉頁面就只剩下載出來的圖。一次只能選一個標籤，文字單行置中。程式裡還留著一段從未被呼叫的「最近使用文字」功能，是開發過程的殘留，作品集版本沒有補上。</p></article>
+<article class="cs-card"><span class="cs-label">學到的事</span><h3>把需求講到能被實作，本身就是一種設計</h3><p>這個工具讓我確認了一件事：我不需要自己寫每一行程式，但我必須能說清楚使用者在哪一步、手上有什麼、接下來要做什麼決定。後來的織序工作台和洗標組合器，都是沿著同一種方式做出來的。</p><div class="actions"><a class="btn primary" href="work/sample-annotator/index.html" target="_blank" rel="noopener">開啟工具 ↗</a><a class="btn" href="case-washsymbol.html">下一個工具：洗標符號組合器 →</a></div></article>
+<div class="back-row"><a class="btn" href="index.html">← 返回作品集首頁</a><a class="btn" href="index.html#tools">其他 Tools</a></div>
+</section>
+
+</div></div>
+</main>
+<footer class="site-footer"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><span>Tools 01 · 布樣標註工具 · 2026 · <a href="mailto:Kerijanschitz@outlook.com">Kerijanschitz@outlook.com</a> · <a href="case-annotator-en.html" lang="en">English</a></span><a href="#top">回到頂端 ↑</a></div></footer>
+<script src="case.js"></script></body></html>

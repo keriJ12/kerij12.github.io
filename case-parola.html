@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Parola：給德語使用者的義大利文練習器。60 秒挑戰、錯題本、每個字分意思與冠詞兩種能力算掌握度，單字與動詞冠詞自由練，離線可用。"><title>Parola 義大利文練習｜Tools — Keri Janschitz 作品集</title><link rel="stylesheet" href="site.css"><link rel="stylesheet" href="theme-midnight.css"></head>
+<body class="cs-page">
+<a class="skip" href="#main">跳到主要內容</a>
+<header class="site-header"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><nav class="site-nav" aria-label="網站導覽"><a href="index.html#case-studies">Case Studies</a><a href="index.html#tools" aria-current="page">Tools</a><a href="index.html#playground">Playground</a><a href="index.html#about">About</a><a class="lang-switch" href="case-parola-en.html" lang="en" hreflang="en" title="English version">EN</a><a class="btn small primary" href="work/parola/index.html" target="_blank" rel="noopener">開啟工具 ↗</a></nav></div></header>
+<main id="main">
+<section class="cs-hero" id="top"><div class="wrap"><nav class="crumbs" aria-label="路徑"><a href="index.html">作品集首頁</a><span>/</span><a href="index.html#tools">Tools</a><span>/</span><span>語言學習 · 自用練習器</span></nav><h1>Parola｜60 秒內把義大利文單字和冠詞練到會</h1><p class="cs-intro">我自己學義大利文用的練習器，介面是德文。一個檔案三個分頁：60 秒挑戰計分、答錯自動進錯題本、每個字分「意思」與「冠詞」兩種能力各自算掌握度；另有單字與動詞冠詞兩個沒有時間壓力的自由練習。可以產生挑戰碼讓朋友玩同一組題，比較結果並存成分享卡。離線可用，進度存在瀏覽器。</p><div class="actions"><a class="btn primary" href="work/parola/index.html" target="_blank" rel="noopener">開啟工具 ↗</a><a class="btn" href="#c3">看設計決策 ↓</a></div></div><div class="wrap"><ul class="cs-meta"><li>自用工具 · 每天在用</li><li>學習設計 · AI 輔助實作</li><li>2026 · 德文介面</li><li>單一 HTML · 離線 · 無外部函式庫</li></ul></div><div class="wrap cs-hero-shots cs-hero-one"><figure><img src="assets/work-parola.png" alt="Parola 首頁：60 秒挑戰分頁，選學習單元、開始挑戰、錯題本"><figcaption>60 秒挑戰分頁：先選學習單元，再開始；錯題本與計分規則在同一頁</figcaption></figure></div></section>
+
+<div class="wrap cs-layout">
+<aside class="cs-toc" aria-label="章節目錄"><ol><li><a href="#c1"><span>01</span>背景</a></li><li><a href="#c2"><span>02</span>問題</a></li><li><a href="#c3"><span>03</span>設計決策</a></li><li><a href="#c4"><span>04</span>怎麼運作</a></li><li><a href="#c5"><span>05</span>限制與誠實說明</a></li></ol><a class="cs-toc-back" href="index.html#tools">← 返回 Tools</a></aside>
+<div class="cs-body">
+
+<section class="cs-chapter" id="c1"><h2 class="cs-chapter-title"><span>01</span>背景</h2>
+<article class="cs-card"><span class="cs-label">情境</span><h3>住在德語區、學義大利文，想要一個每天五分鐘就能用的東西</h3><p>市面上的 App 要登入、要訂閱、要連網，而我要的只是：打開就練、練完知道哪裡弱、下次先練弱的。所以這是一個單一 HTML 檔，放在桌面雙擊就開，手機瀏覽器也能用。</p></article>
+</section>
+
+<section class="cs-chapter" id="c2"><h2 class="cs-chapter-title"><span>02</span>問題</h2>
+<article class="cs-card"><span class="cs-label">問題陳述</span><h3>「會這個字」其實是兩件事：知道意思，和知道它的冠詞</h3><p>義大利文初學者最常錯的不是字義，是 il／la／lo／l’。一般單字 App 把一個字當一個項目計分，冠詞錯了也算「會了一半」。這個工具把每個字拆成兩種能力各自追蹤，名詞的冠詞是獨立題目、獨立掌握度。</p></article>
+<article class="cs-card"><span class="cs-label">範圍</span><h3>做什麼、刻意不做什麼</h3><div class="cs-moscow"><div><h4>做</h4><ul><li>60 秒挑戰：連續作答、連勝加分、答錯扣秒</li><li>錯題本：答錯自動進，同一能力連續答對兩次才出</li><li>掌握度：每字每能力連續三次答對＝100%，答錯歸零</li><li>單字自由練（選擇／拼寫）、可加自己的單字表</li><li>動詞四個時態 × 12 個動詞，定冠詞與不定冠詞</li><li>挑戰碼／連結與對戰結果、PNG 分享卡</li></ul></div><div><h4>刻意不做</h4><ul><li>帳號、雲端同步、排行榜</li><li>語音、例句、完整課程</li><li>把自由練習算進挑戰的掌握度</li><li>任何假裝是測驗成績的分數</li></ul></div></div></article>
+</section>
+
+<section class="cs-chapter" id="c3"><h2 class="cs-chapter-title"><span>03</span>設計決策</h2>
+<article class="cs-card"><span class="cs-label">決策 · 時間而非題數</span><h3>60 秒，答錯扣 3 秒</h3><p>時間壓力會讓「會但要想很久」的字浮出來，這些才是該練的。答錯扣秒數比扣分更有感，但不會讓一題失誤毀掉整回合；連勝從第二題起每題多 2 分、最多多 10 分，鼓勵穩定而不是搶快。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 錯題本自動進出</span><h3>不用自己收藏，連續答對兩次才會消失</h3><p>手動收藏錯題的 App 最後都沒人收藏。答錯就進錯題本，要在同一能力連續答對兩次才移除，避免「看過一次就以為會了」。錯題訓練沒有時間限制。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 掌握度歸零</span><h3>連續三次對是 100%，一次錯回到 0</h3><p>這很嚴格，但對自己誠實：掌握度是「現在穩不穩」，不是「歷史上對過幾次」。頁面上直接寫「這是練習值，不是測驗成績」，沒練過的字也算進去，數字不會好看得不真實。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 和朋友玩</span><h3>挑戰碼用種子隨機，同一組碼就是同一組題</h3><p>把回合編成一段碼或連結，朋友貼上去就拿到一模一樣的題目與順序，結果才有可比性。碼裡只有可選的暱稱和分數，沒有個資；分享卡用 Canvas 畫成 PNG。</p></article>
+<article class="cs-card"><span class="cs-label">決策 · 三個分頁各自獨立</span><h3>自由練習不污染挑戰的數據</h3><p>單字與動詞冠詞是沒有壓力的練習場，可以慢慢試；它們的結果不影響挑戰的掌握度，頁面上有寫明。切換分頁會結束進行中的挑戰回合，避免切出去查答案。</p></article>
+</section>
+
+<section class="cs-chapter" id="c4"><h2 class="cs-chapter-title"><span>04</span>怎麼運作</h2>
+<article class="cs-card"><span class="cs-label">結構</span><h3>一個檔案、三個內嵌的小網頁</h3><ul class="cs-list"><li><b>外殼</b>只有三個分頁鈕；每個分頁是一個 iframe 內嵌的完整小網頁，彼此隔離但共用一個檔案。</li><li><b>60 秒挑戰</b>：32 個單字、4 個主題（日常、學校、飲食、外出）；選單元、計時、計分、錯題本、掌握度、挑戰碼、分享卡。</li><li><b>單字</b>：依主題自由練，選擇或拼寫，可儲存自己的單字表。</li><li><b>動詞與冠詞</b>：presente、passato prossimo、imperfetto、futuro semplice 四個時態 × 12 個動詞；定冠詞單複數、不定冠詞；附速查表。</li></ul></article>
+<article class="cs-card"><span class="cs-label">技術</span><h3>純 HTML/CSS/JS，約 105 KB</h3><p>沒有框架、沒有外部函式庫。進度存在瀏覽器兩個 localStorage 鍵；存不了時畫面提示「無法儲存」而不是壞掉。字型用 Google Fonts，離線時退回系統字型。作品集版本只加了頂部導覽列，內容與程式一行沒改。</p></article>
+</section>
+
+<section class="cs-chapter" id="c5"><h2 class="cs-chapter-title"><span>05</span>限制與誠實說明</h2>
+<article class="cs-card"><span class="cs-label">限制</span><h3>示範規模的自用工具</h3><p>32 個單字、12 個動詞，是我自己當下在學的範圍，不是完整課程。義大利文內容是我整理的，沒有母語者審校。單機、單人，沒有帳號與同步，清瀏覽資料就歸零。文法頁兩個外部連結指向 Treccani 百科，離線時打不開。</p><div class="actions"><a class="btn primary" href="work/parola/index.html" target="_blank" rel="noopener">開啟工具 ↗</a><a class="btn" href="case-yarn.html">下一個工具：紗線需求計算器 →</a></div></article>
+<div class="back-row"><a class="btn" href="index.html">← 返回作品集首頁</a><a class="btn" href="index.html#tools">其他 Tools</a></div>
+</section>
+
+</div></div>
+</main>
+<footer class="site-footer"><div class="wrap"><a class="logo" href="index.html">Keri Janschitz <small>PORTFOLIO</small></a><span>Tools 03 · Parola 義大利文練習 · 2026 · <a href="mailto:Kerijanschitz@outlook.com">Kerijanschitz@outlook.com</a> · <a href="case-parola-en.html" lang="en">English</a></span><a href="#top">回到頂端 ↑</a></div></footer>
+<script src="case.js"></script></body></html>
