@@ -276,3 +276,36 @@ section{padding:44px 0}
 .case-cards .work-card.featured-weave{grid-column:1/-1;flex-direction:row}
 .case-cards .work-card.featured-weave .media{aspect-ratio:auto;width:46%;border-bottom:0;border-right:1px solid var(--line)}
 @media(max-width:1000px){.cs-hero-two{grid-template-columns:1fr}.case-cards{grid-template-columns:1fr}.case-cards .work-card.featured-weave{flex-direction:column}.case-cards .work-card.featured-weave .media{width:100%;aspect-ratio:16/9;border-right:0;border-bottom:1px solid var(--line)}}
+/* hero 流程圖卡片 */
+.hero-flow{background:var(--slate);border:1px solid var(--line);border-radius:14px;padding:16px 18px 18px;box-shadow:0 24px 50px rgba(0,0,0,.22);color:var(--ink);min-width:0}
+.flow-bar{display:flex;align-items:center;gap:12px;font:12px/1 Consolas,"SF Mono",monospace;color:var(--muted);margin-bottom:12px}
+.flow-dots{display:inline-flex;gap:6px}.flow-dots i{width:10px;height:10px;border-radius:50%;background:#e5695f}.flow-dots i:nth-child(2){background:#e8b75c}.flow-dots i:nth-child(3){background:#6fcf8f}
+.hero-flow svg{display:block;width:100%;height:auto;overflow:visible}
+.flow-wire{fill:none;stroke:var(--line);stroke-width:2}
+.flow-wire-label{font:11px Consolas,monospace;fill:var(--muted)}
+.flow-dot{fill:var(--blue)}
+.flow-node rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.flow-type{font:600 10.5px Consolas,"SF Mono",monospace;letter-spacing:1px;fill:var(--muted)}
+.flow-label{font:600 15px "Segoe UI","Microsoft JhengHei","Noto Sans TC",sans-serif;fill:var(--ink)}
+.flow-pin{fill:var(--muted)}
+.flow-trigger rect,.flow-output rect{stroke:var(--blue)}.flow-trigger .flow-pin,.flow-output .flow-pin{fill:var(--blue)}.flow-trigger .flow-type,.flow-output .flow-type{fill:var(--blue)}
+.flow-ai rect{stroke:#e8b75c}.flow-ai .flow-pin{fill:#e8b75c}.flow-ai .flow-type{fill:#e8b75c}
+.flow-rule rect{stroke:var(--muted);stroke-dasharray:4 3}
+.flow-person rect{stroke:#6fcf8f}.flow-person .flow-pin{fill:#6fcf8f}.flow-person .flow-type{fill:#6fcf8f}
+.flow-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font-size:12px;color:var(--muted)}
+.flow-legend span{display:inline-flex;align-items:center;gap:6px}.flow-legend span::before{content:"";width:9px;height:9px;border-radius:3px;border:1.5px solid}
+.lg-ai::before{border-color:#e8b75c!important}.lg-rule::before{border-color:var(--muted)!important;border-style:dashed!important}.lg-person::before{border-color:#6fcf8f!important}
+.flow-foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 14px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.flow-live{display:inline-flex;align-items:center;gap:7px;color:var(--ink)}.flow-live::before{content:"";width:8px;height:8px;border-radius:50%;background:#6fcf8f;box-shadow:0 0 0 3px rgba(111,207,143,.18)}
+.flow-link{display:inline-block;margin-top:10px;font-size:13px;color:var(--blue)}.flow-link:hover{text-decoration:underline}
+@media(prefers-reduced-motion:reduce){.flow-dot{display:none}}
+@media(max-width:700px){.hero-flow{padding:14px}.flow-label{font-size:17px}.flow-type{font-size:11.5px}}
+
+/* 首屏動態背景（經緯線） */
+.hero.has-canvas{position:relative;overflow:hidden;min-height:min(820px,90vh);display:flex;align-items:center;padding:72px 0 64px}
+.hero.has-canvas>.wrap{position:relative;z-index:2;width:min(1180px,92%)}
+.hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.hero.has-canvas::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,color-mix(in srgb,var(--bg) 88%,transparent) 0%,color-mix(in srgb,var(--bg) 55%,transparent) 42%,transparent 72%),linear-gradient(0deg,var(--bg) 0%,transparent 18%)}
+.hero.has-canvas h1{font-size:clamp(30px,3.8vw,56px);letter-spacing:-1px;line-height:1.15}
+.hero.has-canvas .hero-flow{backdrop-filter:blur(6px);background:color-mix(in srgb,var(--slate) 82%,transparent)}
+@media(max-width:1000px){.hero.has-canvas{min-height:0;padding:56px 0 48px}}
