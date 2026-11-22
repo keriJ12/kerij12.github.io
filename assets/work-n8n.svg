@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 660" role="img" aria-label="Fabric enquiry intake workflow in five stages: intake, extract, look up fabrics, human review, log and act">
+<style>
+.bg{fill:#0f1822}
+.t{font:600 26px "Segoe UI",Arial,sans-serif;fill:#eef3f8}
+.s{font:15px "Segoe UI",Arial,sans-serif;fill:#9fb0c3}
+.h{font:700 19px "Segoe UI",Arial,sans-serif;fill:#fff}
+.d{font:13px "Segoe UI",Arial,sans-serif;fill:#fff;opacity:.85}
+.n rect{fill:#121b26;fill-opacity:.9;stroke:#fff;stroke-opacity:.28}
+.n text{font:600 14px "Segoe UI",Arial,sans-serif;fill:#f2f6fa}
+.k{font:600 10.5px Consolas,monospace;letter-spacing:1px;fill:#fff;opacity:.7}
+.w{fill:none;stroke:#c9d5e2;stroke-width:2;stroke-opacity:.75}
+.lg{font:13px "Segoe UI",Arial,sans-serif;fill:#c9d5e2}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#c9d5e2"/></marker></defs>
+<rect class="bg" width="1440" height="660"/>
+<text class="t" x="40" y="58">Fabric enquiry intake · n8n workflow</text>
+<text class="s" x="40" y="86">A customer email becomes a checked case: AI drafts, rules decide, a person approves.</text>
+<g transform="translate(1010 44)"><rect width="14" height="14" rx="3" fill="#6B4FA0"/><text class="lg" x="22" y="12">AI</text><rect x="64" width="14" height="14" rx="3" fill="#2F7D7A"/><text class="lg" x="86" y="12">Rules and lookups</text><rect x="226" width="14" height="14" rx="3" fill="#C7772A"/><text class="lg" x="248" y="12">Person decides</text></g>
+
+<rect x="40" y="130" width="212" height="470" rx="14" fill="#3B5B8C"/>
+<text class="h" x="58" y="166">1. Intake</text><text class="d" x="58" y="190">New enquiry email arrives</text>
+<g class="n"><rect x="58" y="226" width="176" height="62" rx="10"/><text class="k" x="72" y="248">TRIGGER</text><text x="72" y="272">Gmail trigger</text>
+<rect x="58" y="318" width="176" height="62" rx="10"/><text class="k" x="72" y="340">CLEAN UP</text><text x="72" y="364">Keep 5 fields</text>
+<rect x="58" y="410" width="176" height="62" rx="10"/><text class="k" x="72" y="432">GMAIL</text><text x="72" y="456">Mark as read</text></g>
+
+<rect x="270" y="130" width="232" height="470" rx="14" fill="#6B4FA0"/>
+<text class="h" x="288" y="166">2. Extract</text><text class="d" x="288" y="190">AI translates, rules ask</text>
+<g class="n"><rect x="288" y="226" width="196" height="62" rx="10"/><text class="k" x="302" y="248">AI</text><text x="302" y="272">Draft the request</text>
+<rect x="288" y="318" width="196" height="62" rx="10"/><text class="k" x="302" y="340">FIXED FORMAT</text><text x="302" y="364">Structured fields</text>
+<rect x="288" y="410" width="196" height="62" rx="10"/><text class="k" x="302" y="432">RULES · NOT AI</text><text x="302" y="456">Build open questions</text></g>
+
+<rect x="520" y="130" width="400" height="470" rx="14" fill="#2F7D7A"/>
+<text class="h" x="538" y="166">3. Look up fabrics</text><text class="d" x="538" y="190">Model named? Look it up. Otherwise match by properties.</text>
+<g class="n"><rect x="538" y="226" width="364" height="62" rx="10"/><text class="k" x="552" y="248">RULE · NOT AI</text><text x="552" y="272">Existing model named?</text>
+<rect x="538" y="318" width="174" height="62" rx="10"/><text class="k" x="552" y="340">ROUTE B</text><text x="552" y="364">Look up the model</text>
+<rect x="728" y="318" width="174" height="62" rx="10"/><text class="k" x="742" y="340">ROUTE A</text><text x="742" y="364">Match fibre, colour…</text>
+<rect x="538" y="410" width="364" height="62" rx="10"/><text class="k" x="552" y="432">ONE SHAPE FOR BOTH ROUTES</text><text x="552" y="456">Review package</text></g>
+<text class="d" x="538" y="512">Three outcomes: fabrics listed · NO MATCH ·</text><text class="d" x="538" y="532">NOT SEARCHED (the email gave nothing to search)</text>
+
+<rect x="938" y="130" width="196" height="470" rx="14" fill="#C7772A"/>
+<text class="h" x="956" y="166">4. Human review</text><text class="d" x="956" y="190">Nothing happens before this</text>
+<g class="n"><rect x="956" y="226" width="160" height="62" rx="10"/><text class="k" x="970" y="248">EMAIL</text><text x="970" y="272">Review request</text>
+<rect x="956" y="318" width="160" height="62" rx="10"/><text class="k" x="970" y="340">PERSON</text><text x="970" y="364">Pick a decision</text></g>
+<text class="d" x="956" y="424">Approve</text><text class="d" x="956" y="446">Send back</text><text class="d" x="956" y="468">Hand to development</text>
+
+<rect x="1152" y="130" width="248" height="470" rx="14" fill="#3F8A56"/>
+<text class="h" x="1170" y="166">5. Log and act</text><text class="d" x="1170" y="190">Every decision leaves a record</text>
+<g class="n"><rect x="1170" y="226" width="212" height="62" rx="10"/><text class="k" x="1184" y="248">GOOGLE SHEETS</text><text x="1184" y="272">Log the enquiry</text>
+<rect x="1170" y="318" width="212" height="62" rx="10"/><text class="k" x="1184" y="340">RULE</text><text x="1184" y="364">Route by decision</text>
+<rect x="1170" y="410" width="212" height="62" rx="10"/><text class="k" x="1184" y="432">GMAIL · DRAFT ONLY</text><text x="1184" y="456">Prepare reply, not sent</text></g>
+
+<path class="w" marker-end="url(#a)" d="M252 257H286"/><path class="w" marker-end="url(#a)" d="M502 441H536" transform="translate(0 -184)"/><path class="w" marker-end="url(#a)" d="M920 441H954" transform="translate(0 -184)"/><path class="w" marker-end="url(#a)" d="M1134 349H1168" transform="translate(0 -92)"/>
+<text class="s" x="40" y="636">Prototype on n8n Cloud · fictional fabric list · errors are logged and emailed by a separate workflow</text>
+</svg>

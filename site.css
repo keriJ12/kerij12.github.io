@@ -309,3 +309,5 @@ section{padding:44px 0}
 .hero.has-canvas h1{font-size:clamp(30px,3.8vw,56px);letter-spacing:-1px;line-height:1.15}
 .hero.has-canvas .hero-flow{backdrop-filter:blur(6px);background:color-mix(in srgb,var(--slate) 82%,transparent)}
 @media(max-width:1000px){.hero.has-canvas{min-height:0;padding:56px 0 48px}}
+/* 示意圖卡片：完整顯示，不裁切 */
+.work-card .media.contain img{object-fit:contain}

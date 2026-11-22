@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="用 n8n 做的布料詢價流程：AI 把客戶 Email 整理成欄位，規則決定路線與該問的問題，查布料表，人在信箱裡做決定，全程留紀錄。寫明設計決定、測試中發現的問題與限制。"><title>布料詢價 n8n 流程｜Case Study — Keri Janschitz 作品集</title><link rel="stylesheet" href="site.css"><link rel="stylesheet" href="theme-midnight.css"></head>
+<body class="cs-page">
+<a class="skip" href="#main">跳到主要內容</a>
+<header class="site-header"><div class="wrap"><a class="logo" href="index-zh.html">Keri Janschitz <small>PORTFOLIO</small></a><nav class="site-nav" aria-label="網站導覽"><a href="index-zh.html#case-studies" aria-current="page">Case Studies</a><a href="index-zh.html#tools">Tools</a><a href="index-zh.html#playground">Playground</a><a href="index-zh.html#about">About</a><a class="lang-switch" href="case-n8n-en.html" lang="en" hreflang="en" title="English version">EN</a><a class="btn small primary" href="#c3">看流程五段</a></nav></div></header>
+<main id="main">
+<section class="cs-hero" id="top"><div class="wrap"><nav class="crumbs" aria-label="路徑"><a href="index-zh.html">作品集首頁</a><span>/</span><a href="index-zh.html#case-studies">Case Studies</a><span>/</span><span>n8n 自動化 · 詢價信處理</span></nav><h1>布料詢價 n8n 流程｜AI 起草，規則決定，<span style="white-space:nowrap">人把關</span></h1><p class="cs-intro">客戶寄來一封寫得很隨意的詢價信。流程用 AI 把它整理成欄位，用固定規則決定走哪條路、還缺什麼要問，去布料表查庫存與交期，再寄一封審核信給負責的人。人選了決定之後，才寫入紀錄；需要回頭問客戶時，回信草稿已經備好，但不會自己寄出。這是在 n8n Cloud 上做的可運作原型，資料全部是虛構的。</p><div class="actions"><a class="btn primary" href="#c3">看流程五段</a><a class="btn" href="#c4">看五個設計決定</a></div></div><div class="wrap"><ul class="cs-meta"><li>n8n · 工作流程自動化</li><li>Gmail · Google Sheets · LLM</li><li>2026 · 可運作原型 · 虛構資料</li><li>兩個版本：表單、信箱</li></ul></div><div class="wrap cs-hero-shots cs-hero-one"><figure><a href="assets/work-n8n-canvas.png" target="_blank" rel="noopener"><img src="assets/work-n8n-canvas.png" width="1420" height="478" alt="n8n 畫布截圖（Gmail 版）：收信、AI 整理欄位、查布料表、人工審核、紀錄與回信草稿五段"></a><figcaption>n8n 畫布實際截圖（Gmail 版）。顏色是我在畫布上分段用的標籤：紫色段落是 AI，青綠是規則與查表，橘色是人做決定。點圖看大圖。</figcaption></figure></div></section>
+
+<div class="wrap cs-layout">
+<aside class="cs-toc" aria-label="章節目錄"><ol><li><a href="#c1"><span>01</span>背景</a></li><li><a href="#c2"><span>02</span>範圍</a></li><li><a href="#c3"><span>03</span>流程五段</a></li><li><a href="#c4"><span>04</span>五個設計決定</a></li><li><a href="#c5"><span>05</span>出錯時怎麼辦</a></li><li><a href="#c6"><span>06</span>限制與誠實說明</a></li></ol><a class="cs-toc-back" href="index-zh.html#case-studies">← 返回 Case Studies</a></aside>
+<div class="cs-body">
+
+<section class="cs-chapter" id="c1"><h2 class="cs-chapter-title"><span>01</span>背景</h2>
+<article class="cs-card"><span class="cs-label">情境</span><h3>詢價信有兩種，但寫法有一百種</h3><p>紡織公司的客服每天收到詢價信。有的客戶直接報型號要追加，有的只描述想要的布：黑色、亞麻、做襯衫、大約 160 克。信裡常常缺數量、缺交期，或只寫「大約」。客服要先讀懂、再去查有沒有現成的布、再決定下一步交給誰。</p><p>這個案例是<a href="case-weave.html">織序</a>裡「客服整理需求」那一段的延伸：織序用純前端模擬了整條交接流程，這裡則把最前面的一小段，接上真的信箱、真的試算表和真的語言模型，看它實際跑起來會遇到什麼。</p></article>
+</section>
+
+<section class="cs-chapter" id="c2"><h2 class="cs-chapter-title"><span>02</span>範圍</h2>
+<article class="cs-card"><span class="cs-label">範圍</span><h3>做什麼、刻意不做什麼</h3><div class="cs-moscow"><div><h4>做</h4><ul><li>信箱收信觸發，另有一個貼信用的表單版</li><li>AI 把信整理成固定欄位</li><li>規則判斷路線：指名型號，或只描述特性</li><li>查布料表：庫存、最小訂量、交期、是否停產</li><li>規則列出要問客戶的問題</li><li>寄審核信，由人選三種決定之一</li><li>每次決定寫入紀錄表</li><li>退回時備好回信草稿</li><li>流程出錯時寫入錯誤紀錄並寄信通知</li></ul></div><div><h4>刻意不做</h4><ul><li>讓 AI 決定路線、決定要問什麼，或判斷能不能接單</li><li>自動寄信給客戶</li><li>AI 猜測信裡沒寫的數量、日期或型號</li><li>接真實公司資料或真實客戶</li><li>建單、通知開發部門等核准之後的動作</li></ul></div></div></article>
+</section>
+
+<section class="cs-chapter" id="c3"><h2 class="cs-chapter-title"><span>03</span>流程五段</h2>
+<article class="cs-card"><span class="cs-label">總覽</span><h3>一封信從進來到有結果，經過五段</h3><figure style="margin:14px 0 0"><a href="assets/work-n8n-form.png" target="_blank" rel="noopener"><img src="assets/work-n8n-form.png" width="1692" height="328" alt="n8n 畫布截圖（表單版）：同樣五段，入口改成貼信用的表單" style="display:block;width:100%;height:auto;border-radius:10px"></a><figcaption style="margin-top:8px;font-size:13px;color:var(--muted)">表單版：同樣五段，入口改成貼信用的表單，審核也在表單頁完成。點圖看大圖。</figcaption></figure></article>
+<article class="cs-card"><span class="cs-label">逐段說明</span><h3>每一段只做一件事</h3><ul class="cs-list"><li><b>1. 收信</b>：只抓寄到詢價專用地址的未讀信，留下內文、寄件人、主旨與對話編號五個欄位，其餘傳輸資訊丟掉，然後把信標成已讀，避免重複處理。</li><li><b>2. 整理欄位</b>：語言模型把信翻成固定欄位（客戶、型號、纖維、顏色、數量、克重、幅寬、用途、交期）。沒寫的留空。接著由規則，而不是 AI，列出要問客戶的問題。</li><li><b>3. 查布料表</b>：信裡有型號，就用型號查那一筆。沒有型號，就用纖維、顏色、克重、幅寬去比對，客戶沒寫的條件不篩。兩條路最後整理成同一種格式。</li><li><b>4. 人工審核</b>：負責人收到一封信，裡面是整理好的欄位、布料表查到的結果、待確認問題和客戶原信。點按鈕選擇：核准、退回問客戶、轉開發。在這之前，流程不會建立或寄出任何東西。</li><li><b>5. 紀錄與後續</b>：決定寫入紀錄表。選「退回問客戶」時，回信草稿會出現在原信那串對話底下，要不要寄由人決定。</li></ul></article>
+</section>
+
+<section class="cs-chapter" id="c4"><h2 class="cs-chapter-title"><span>04</span>五個設計決定</h2>
+<article class="cs-card"><span class="cs-label">決定 1 · AI 的位置</span><h3>AI 負責翻譯，規則負責決定</h3><p>一開始我讓 AI 同時決定「要問客戶什麼」。用同一組測試信跑了三輪，每一輪都有一兩封出錯，而且錯的地方不固定：客戶明明寫了 200 公尺卻要求確認、把客戶問我們的問題當成我們要問的、把數量和克重搞混。提示越寫越長，它越容易顧此失彼。</p><p>後來把這件事改成規則：欄位是空的就問；客戶在數字前寫了 around、about 這類字就請他確認；有型號時，克重和幅寬查表就有，不問。改完之後，同一封信每次產生的問題都一樣。AI 只留下它做得穩的事，就是把亂的信翻成欄位。</p></article>
+<article class="cs-card"><span class="cs-label">決定 2 · 固定選項</span><h3>纖維只能從五個詞裡選，選不出來就留空</h3><p>客戶寫「100% linen」，布料表寫「Linen 100%」，電腦會認為是兩件事。所以多加一個纖維欄位，限定 AI 只能回傳固定的五個詞之一，後面的比對交給規則。客戶寫了清單以外的纖維，例如絲，成分照抄、纖維留空，查表時自然查不到，交給人判斷。</p></article>
+<article class="cs-card"><span class="cs-label">決定 3 · 三種結果</span><h3>「沒找到」和「沒得找」是兩回事</h3><p>測試時我在表單裡亂打了一串數字，結果審核畫面列出幾乎整張布料表。原因是比對規則寫成「客戶沒寫的條件就不篩」，而這封信什麼都沒寫，等於全部放行。這比查無結果還糟，因為它看起來像有結果。</p><p>現在查表有三種明確的結果：列出符合的布料；有條件但沒有符合的，顯示 NO MATCH，適合轉開發；信裡沒有任何可搜尋的資訊，顯示 NOT SEARCHED，適合退回問客戶。</p></article>
+<article class="cs-card"><span class="cs-label">決定 4 · 不漏信</span><h3>查不到的時候，流程不能無聲無息地結束</h3><p>第一版用篩選節點比對布料。測試一封要紅色絲布的信時，沒有任何布符合，流程就在那一步停下來：沒有審核畫面、沒有紀錄、沒有通知。而「我們沒有這種布」恰好是最需要人處理的情況。</p><p>修法是調換順序：先把整張表收成一包，再從包裡挑。挑完是空的，仍然是一包，流程會繼續走到審核。代價是比對規則從畫面上看得見的五個條件，變成一段表達式，可讀性較差；對詢價流程來說，不漏信比好看重要。</p></article>
+<article class="cs-card"><span class="cs-label">決定 5 · 人的位置</span><h3>審核在信箱裡完成，回信只備到草稿</h3><p>審核的人不需要登入 n8n，在信箱裡看完就能決定。同一個審核連結不能回答兩次。退回時，流程用待確認問題組好一封回信，掛在客戶原信的對話底下，收件人也帶好了，但停在草稿。客戶沒留名字時，稱呼會改用通用寫法，不會空著。</p></article>
+</section>
+
+<section class="cs-chapter" id="c5"><h2 class="cs-chapter-title"><span>05</span>出錯時怎麼辦</h2>
+<article class="cs-card"><span class="cs-label">兩層處理</span><h3>預期中的狀況在節點裡處理，沒預期到的交給另一個流程</h3><ul class="cs-list"><li><b>節點層</b>：讀寫試算表的節點會自動重試；查不到資料時送出空結果，讓流程繼續。</li><li><b>流程層</b>：另外做了一個獨立的錯誤處理流程。任何掛上它的工作流失敗時，它會把流程名稱、失敗的節點、錯誤訊息和執行紀錄的連結寫進錯誤紀錄表，同時寄一封通知信。做成獨立的，是因為壞掉的流程沒辦法替自己報告，而且一個可以給多個流程共用。</li></ul></article>
+<article class="cs-card"><span class="cs-label">實際發生過</span><h3>一次真的錯誤，一分鐘內找到原因</h3><p>有一次修改時，我把另一個節點的文字貼進了 AI 的提示。送出表單的人只看到「請再試一次」，看不出原因。從執行紀錄點進去，直接顯示是哪個節點、缺了什麼資料，改回來重新發布就恢復了。這次不是刻意製造的測試，是錯誤處理第一次派上用場。</p></article>
+</section>
+
+<section class="cs-chapter" id="c6"><h2 class="cs-chapter-title"><span>06</span>限制與誠實說明</h2>
+<article class="cs-card"><span class="cs-label">驗證了什麼</span><h3>用十種測試輸入走過兩個版本</h3><p>包含指名型號、指名不存在的型號、指名缺貨的型號、只描述特性、條件寬鬆到有兩筆符合、規格符合但已停產、布料表沒有的纖維、沒有署名、空白信，以及亂打的內容。兩個版本都在發布狀態下，用真的信件和表單從頭跑到尾。這是我自己做的功能測試，沒有量過大量信件下的準確率。</p></article>
+<article class="cs-card"><span class="cs-label">限制</span><h3>這是原型，離上線還有一段距離</h3><ul class="cs-list"><li><b>核准之後沒有真的動作</b>：三種決定目前只差在紀錄和有沒有草稿，沒有建單，也沒有人收到轉開發的通知。</li><li><b>資料是虛構的</b>：布料表只有 12 筆，每次整張讀取。真實的幾千筆需要換成查詢，否則會碰到試算表的讀取上限。</li><li><b>只處理英文與公制</b>：碼、盎司、德文或中文的信，規則抓不到。「大約」的判斷只認得幾個英文詞，而且數字後面要有單位。</li><li><b>一次一封</b>：同一分鐘進來兩封信時，後段取資料的寫法可能讓兩封互相干擾。</li><li><b>信在處理前就標成已讀</b>：流程中途失敗時不會自動重試，靠錯誤通知讓人手動處理。</li><li><b>真實信件的雜訊沒處理</b>：附件、轉寄引文、簽名檔、一封信問三種布。</li><li><b>沒有重複檢查</b>：同一封信進來兩次會記兩筆。</li><li><b>帳號是個人試用版</b>：沒有權限分層，信箱是另開的示範帳號。</li></ul><div class="actions"><a class="btn primary" href="case-weave.html">看完整的交接流程：織序 →</a><a class="btn" href="case-ipas.html">下一個案例：iPAS</a></div></article>
+<div class="back-row"><a class="btn" href="index-zh.html">← 返回作品集首頁</a><a class="btn" href="index-zh.html#case-studies">其他 Case Studies</a></div>
+</section>
+
+</div></div>
+</main>
+<footer class="site-footer"><div class="wrap"><a class="logo" href="index-zh.html">Keri Janschitz <small>PORTFOLIO</small></a><span>Case Study 03 · 布料詢價 n8n 流程 · 2026 · <a href="mailto:Kerijanschitz@outlook.com">Kerijanschitz@outlook.com</a> · <a href="case-n8n-en.html" lang="en">English</a></span><a href="#top">回到頂端 ↑</a></div></footer>
+<script src="case.js"></script></body></html>
