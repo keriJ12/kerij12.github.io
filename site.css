@@ -327,7 +327,7 @@ section{padding:44px 0}
 
 /* n8n 卡片圖：置中；窄螢幕時框依圖片比例，不留大塊黑底 */
 .work-card .media.contain img{object-position:center}
-@media(max-width:1000px){.case-cards .work-card.featured-weave .media.contain{aspect-ratio:1820/578}}
+@media(max-width:1000px){.case-cards .work-card.featured-weave .media.contain img{object-fit:cover;object-position:center}}
 
 /* 手機：流程卡半透明讓織布透出；節點文字縮到框內（iPhone 字較寬） */
 @media(max-width:700px){.hero.has-canvas .hero-flow{backdrop-filter:none;background:color-mix(in srgb,var(--slate) 58%,transparent)}.flow-label{font-size:14.5px}.flow-type{font-size:10.5px;letter-spacing:.5px}}
