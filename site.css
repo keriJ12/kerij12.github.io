@@ -324,3 +324,7 @@ section{padding:44px 0}
 .work-card .media.contain{background:#1b1b1b}
 /* n8n 特寫圖手機不橫滑 */
 @media(max-width:900px){.n8n-shot img[src*="n8n-zoom"]{width:100%!important;max-width:100%!important}}
+
+/* n8n 卡片圖：置中；窄螢幕時框依圖片比例，不留大塊黑底 */
+.work-card .media.contain img{object-position:center}
+@media(max-width:1000px){.case-cards .work-card.featured-weave .media.contain{aspect-ratio:1820/578}}
