@@ -14,10 +14,13 @@ fitShots();addEventListener('resize',fitShots);addEventListener('load',fitShots)
   const rgb=c=>{const m=c.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);if(!m)return[168,217,197];let h=m[1];if(h.length===3)h=h.replace(/./g,x=>x+x);return[0,2,4].map(i=>parseInt(h.slice(i,i+2),16))};
   const rgba=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`;
   const AMBER=[232,183,92],TEAL=[52,128,160],VIOLET=[96,92,180];
-  let W=0,H=0,dpr=1,A=[168,217,197],INK=[237,242,246],grain=null,visible=true,raf=0;
+  let W=0,H=0,dpr=1,A=[168,217,197],INK=[237,242,246],grain=null,visible=true,raf=0,hz=.5,mob=false;
   const mouse={x:.7,y:.45,tx:.7,ty:.45};
   function size(){
     const r=hero.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(devicePixelRatio||1,1.5);
+    // 手機上首屏很高、流程卡片在下半部：織布改從按鈕下方開始，才看得到
+    mob=W<700;hz=.5;
+    if(mob){const a=hero.querySelector('.actions');if(a)hz=Math.min(.7,Math.max(.3,(a.getBoundingClientRect().bottom-r.top+10)/H))}
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
     A=rgb(css('--blue'));INK=rgb(css('--ink'));
     if(!grain){grain=document.createElement('canvas');grain.width=grain.height=180;const g=grain.getContext('2d'),id=g.createImageData(180,180);
@@ -76,7 +79,7 @@ fitShots();addEventListener('resize',fitShots);addEventListener('load',fitShots)
   function draw(t){
     ctx.clearRect(0,0,W,H);
     mouse.x+=(mouse.tx-mouse.x)*.05;mouse.y+=(mouse.ty-mouse.y)*.05;
-    aurora(t,.75);fabric(t,.5,.9);
+    aurora(t,mob?.45:.75);fabric(t,hz,mob?1:.9);
     ctx.globalAlpha=.04;ctx.fillStyle=ctx.createPattern(grain,'repeat');ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;
   }
   function tick(t){raf=0;if(!visible||document.hidden)return;draw(t);raf=requestAnimationFrame(tick)}
