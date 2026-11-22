@@ -331,3 +331,8 @@ section{padding:44px 0}
 
 /* 手機：流程卡半透明讓織布透出；節點文字縮到框內（iPhone 字較寬） */
 @media(max-width:700px){.hero.has-canvas .hero-flow{backdrop-filter:none;background:color-mix(in srgb,var(--slate) 58%,transparent)}.flow-label{font-size:14.5px}.flow-type{font-size:10.5px;letter-spacing:.5px}}
+
+/* 手機：頂部導覽不做背景模糊（模糊會隨首屏動畫每張重算，滑動卡頓） */
+@media(max-width:700px){.site-header{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg)}}
+/* n8n 卡片特寫圖：各寬度皆填滿 */
+.case-cards .work-card .media.contain img{object-fit:cover;object-position:center}

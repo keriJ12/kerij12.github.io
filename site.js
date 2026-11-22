@@ -17,7 +17,7 @@ fitShots();addEventListener('resize',fitShots);addEventListener('load',fitShots)
   let W=0,H=0,dpr=1,A=[168,217,197],INK=[237,242,246],grain=null,visible=true,raf=0,hz=.5,mob=false;
   const mouse={x:.7,y:.45,tx:.7,ty:.45};
   function size(){
-    const r=hero.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(devicePixelRatio||1,1.5);
+    const r=hero.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(devicePixelRatio||1,W<700?1:1.5);
     // 手機上首屏很高、流程卡片在下半部：織布改從按鈕下方開始，才看得到
     mob=W<700;hz=.5;
     if(mob){const a=hero.querySelector('.actions');if(a)hz=Math.min(.7,Math.max(.3,(a.getBoundingClientRect().bottom-r.top+10)/H))}
@@ -80,12 +80,21 @@ fitShots();addEventListener('resize',fitShots);addEventListener('load',fitShots)
     ctx.clearRect(0,0,W,H);
     mouse.x+=(mouse.tx-mouse.x)*.05;mouse.y+=(mouse.ty-mouse.y)*.05;
     aurora(t,mob?.45:.75);fabric(t,hz,mob?1:.9);
-    ctx.globalAlpha=.04;ctx.fillStyle=ctx.createPattern(grain,'repeat');ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;
+    if(!mob){ctx.globalAlpha=.04;ctx.fillStyle=ctx.createPattern(grain,'repeat');ctx.fillRect(0,0,W,H);ctx.globalAlpha=1}
   }
-  function tick(t){raf=0;if(!visible||document.hidden)return;draw(t);raf=requestAnimationFrame(tick)}
+  // 手機：每秒約 30 張、捲動中暫停重畫，讓滑動優先；桌機照常
+  let lastDraw=0,lastScroll=-1e9;
+  addEventListener('scroll',()=>{lastScroll=performance.now()},{passive:true});
+  function tick(t){
+    raf=0;if(!visible||document.hidden)return;
+    const busy=mob&&(t-lastScroll<220||t-lastDraw<32);
+    if(!busy){draw(t);lastDraw=t}
+    raf=requestAnimationFrame(tick);
+  }
   const start=()=>{if(reduce){draw(0);return}if(!raf)raf=requestAnimationFrame(tick)};
   hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();mouse.tx=(e.clientX-r.left)/W;mouse.ty=(e.clientY-r.top)/H});
-  addEventListener('resize',()=>{size();start()});
+  // iPhone 捲動時網址列伸縮會一直觸發 resize：只有寬度或首屏高度真的變了才重建畫布
+  addEventListener('resize',()=>{const r=hero.getBoundingClientRect();if(Math.abs(r.width-W)<1&&Math.abs(r.height-H)<2)return;size();start()});
   document.addEventListener('visibilitychange',start);
   if('IntersectionObserver'in window)new IntersectionObserver(es=>{visible=es[0].isIntersecting;start()}).observe(hero);
   size();start();
