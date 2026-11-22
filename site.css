@@ -336,3 +336,6 @@ section{padding:44px 0}
 @media(max-width:700px){.site-header{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg)}}
 /* n8n 卡片特寫圖：各寬度皆填滿 */
 .case-cards .work-card .media.contain img{object-fit:cover;object-position:center}
+/* 首頁織序預覽：手機用靜態截圖 */
+.shot-img{display:none}
+@media(max-width:1000px){.shot{min-height:0}.shot iframe{display:none}.shot-img{display:block;width:100%;height:auto}}
