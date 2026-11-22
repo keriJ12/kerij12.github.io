@@ -311,3 +311,16 @@ section{padding:44px 0}
 @media(max-width:1000px){.hero.has-canvas{min-height:0;padding:56px 0 48px}}
 /* 示意圖卡片：完整顯示，不裁切 */
 .work-card .media.contain img{object-fit:contain}
+
+/* case-n8n 畫布截圖放大 */
+.wrap.cs-wide{width:min(1420px,96%)}
+.cs-wide img{max-height:none;object-fit:contain;background:#1b1b1b}
+.n8n-shot{display:block}
+.n8n-swipe{display:none;font-size:12px;color:var(--muted);margin-top:6px}
+@media(max-width:900px){.n8n-shot{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}.n8n-shot img{width:1000px!important;max-width:none!important}.n8n-swipe{display:block}}
+
+/* Case Studies 三張橫卡等高；n8n 卡片畫布底色 */
+@media(min-width:1001px){.case-cards{grid-auto-rows:1fr}}
+.work-card .media.contain{background:#1b1b1b}
+/* n8n 特寫圖手機不橫滑 */
+@media(max-width:900px){.n8n-shot img[src*="n8n-zoom"]{width:100%!important;max-width:100%!important}}
