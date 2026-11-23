@@ -16,6 +16,7 @@
 
 <section class="cs-chapter" id="c2"><h2 class="cs-chapter-title"><span>02</span>範圍</h2>
 <article class="cs-card"><span class="cs-label">範圍</span><h3>做什麼、刻意不做什麼</h3><div class="cs-moscow"><div><h4>做</h4><ul><li>信箱收信觸發，另有一個貼信用的表單版</li><li>AI 把信整理成固定欄位</li><li>規則判斷路線：指名型號，或只描述特性</li><li>查布料表：庫存、最小訂量、交期、是否停產</li><li>規則列出要問客戶的問題</li><li>寄審核信，由人選三種決定之一</li><li>每次決定寫入紀錄表</li><li>退回時備好回信草稿</li><li>流程出錯時寫入錯誤紀錄並寄信通知</li></ul></div><div><h4>刻意不做</h4><ul><li>讓 AI 決定路線、決定要問什麼，或判斷能不能接單</li><li>自動寄信給客戶</li><li>AI 猜測信裡沒寫的數量、日期或型號</li><li>接真實公司資料或真實客戶</li><li>建單、通知開發部門等核准之後的動作</li></ul></div></div></article>
+<article class="cs-card"><span class="cs-label">兩個版本</span><h3>先用表單驗證邏輯，再接上信箱</h3><p>第一版用表單：客服把信貼進去，審核也在下一個表單頁完成，方便我反覆測試 AI 整理的欄位、分流規則和查表結果。邏輯穩定之後才做第二版：寄到詢價專用地址的信會自動觸發，審核改成寄信給負責人，退回時回信草稿直接放進客戶原信的對話裡。兩版共用同一套五段流程；本頁最上面是信箱版的畫布，第 03 章是表單版。</p></article>
 </section>
 
 <section class="cs-chapter" id="c3"><h2 class="cs-chapter-title"><span>03</span>流程五段</h2>
@@ -38,7 +39,7 @@
 
 <section class="cs-chapter" id="c6"><h2 class="cs-chapter-title"><span>06</span>限制與誠實說明</h2>
 <article class="cs-card"><span class="cs-label">驗證了什麼</span><h3>用十種測試輸入走過兩個版本</h3><p>包含指名型號、指名不存在的型號、指名缺貨的型號、只描述特性、條件寬鬆到有兩筆符合、規格符合但已停產、布料表沒有的纖維、沒有署名、空白信，以及亂打的內容。兩個版本都在發布狀態下，用真的信件和表單從頭跑到尾。這是我自己做的功能測試，沒有量過大量信件下的準確率。</p></article>
-<article class="cs-card"><span class="cs-label">限制</span><h3>這是原型，離上線還有一段距離</h3><ul class="cs-list"><li><b>核准之後沒有真的動作</b>：三種決定目前只差在紀錄和有沒有草稿，沒有建單，也沒有人收到轉開發的通知。</li><li><b>資料是虛構的</b>：布料表只有 12 筆，每次整張讀取。真實的幾千筆需要換成查詢，否則會碰到試算表的讀取上限。</li><li><b>只處理英文與公制</b>：碼、盎司、德文或中文的信，規則抓不到。「大約」的判斷只認得幾個英文詞，而且數字後面要有單位。</li><li><b>一次一封</b>：同一分鐘進來兩封信時，後段取資料的寫法可能讓兩封互相干擾。</li><li><b>信在處理前就標成已讀</b>：流程中途失敗時不會自動重試，靠錯誤通知讓人手動處理。</li><li><b>真實信件的雜訊沒處理</b>：附件、轉寄引文、簽名檔、一封信問三種布。</li><li><b>沒有重複檢查</b>：同一封信進來兩次會記兩筆。</li><li><b>帳號是個人試用版</b>：沒有權限分層，信箱是另開的示範帳號。</li></ul><div class="actions"><a class="btn primary" href="case-weave.html">看完整的交接流程：織序 →</a><a class="btn" href="case-ipas.html">下一個案例：iPAS</a></div></article>
+<article class="cs-card"><span class="cs-label">限制</span><h3>這是原型，離上線還有一段距離</h3><ul class="cs-list"><li><b>核准之後沒有真的動作</b>：三種決定目前只差在紀錄和有沒有草稿，沒有建單，也沒有人收到轉開發的通知。</li><li><b>資料是虛構的</b>：布料表只有 12 筆，每次整張讀取。真實的幾千筆需要換成查詢，否則會碰到試算表的讀取上限。</li><li><b>只處理英文與公制</b>：碼、盎司、德文或中文的信，規則抓不到。「大約」的判斷只認得幾個英文詞，而且數字後面要有單位。</li><li><b>顏色與纖維要一字不差</b>：比對是逐字的，客戶寫「navy」、布料表寫「dark blue」就對不上。之後可以加一張同義詞對照表，或讓 AI 先把名稱對到固定清單。</li><li><b>一次一封</b>：同一分鐘進來兩封信時，後段取資料的寫法可能讓兩封互相干擾。</li><li><b>信在處理前就標成已讀</b>：流程中途失敗時不會自動重試，靠錯誤通知讓人手動處理。</li><li><b>真實信件的雜訊沒處理</b>：附件、轉寄引文、簽名檔、一封信問三種布。</li><li><b>沒有重複檢查</b>：同一封信進來兩次會記兩筆。</li><li><b>帳號是個人試用版</b>：沒有權限分層，信箱是另開的示範帳號。</li></ul><div class="actions"><a class="btn primary" href="case-weave.html">看完整的交接流程：織序 →</a><a class="btn" href="case-ipas.html">下一個案例：iPAS</a></div></article>
 <div class="back-row"><a class="btn" href="index-zh.html">← 返回作品集首頁</a><a class="btn" href="index-zh.html#case-studies">其他 Case Studies</a></div>
 </section>
 
